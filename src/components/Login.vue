@@ -40,7 +40,7 @@ const handleLogin = async () => {
 
 <style scoped>
 .auth-container {
-  max-width: 600px;
+  max-width: 1200px;
   margin: 2rem auto;
   padding: 2rem;
   background: var(--card-bg);
@@ -50,6 +50,8 @@ const handleLogin = async () => {
 
 .form-group {
   margin-bottom: 1rem;
+  max-width: 600px;
+  margin: 0 auto 1rem auto;
 }
 
 label {
@@ -66,7 +68,6 @@ input {
 }
 
 button {
-  width: 85%;
   padding: 0.8rem;
   background: #646cff;
   color: white;
@@ -78,7 +79,8 @@ button {
 }
 
 .auth-link {
-  width: 85%;
+  max-width: 600px;
+  margin: 0 auto;
   text-align: center;
   margin-top: 1rem;
 }
