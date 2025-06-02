@@ -1,0 +1,11 @@
+{
+  "displayName": "Gemini Model",
+  "model": "gemini-1.5-flash",
+  "defaultConfig": {
+    "temperature": 0.5,
+    "maxOutputTokens": 1024
+  },
+  "features": {
+    "googleSearchGrounding": true
+  }
+}
