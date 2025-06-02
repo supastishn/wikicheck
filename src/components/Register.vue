@@ -16,7 +16,7 @@
       </div>
       <button type="submit">Create Account</button>
       <p class="auth-link">
-        Already have an account? <a href="#" @click.prevent="$emit('toggle')">Log in</a>
+        Already have an account? <router-link to="/login">Log in</router-link>
       </p>
     </form>
   </div>
