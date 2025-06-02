@@ -4,7 +4,7 @@
 </template>
 
 <script setup lang="ts">
-// No script needed
+import Navbar from './components/Navbar.vue'
 </script>
 
 <style scoped>
