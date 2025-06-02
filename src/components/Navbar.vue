@@ -3,8 +3,8 @@
     <nav class="navbar">
       <div class="navbar-title">WikiCheck</div>
       <div class="navbar-links">
-        <a href="#" @click.prevent="$emit('navigate', 'home')">Home</a>
-        <a href="#" @click.prevent="$emit('navigate', 'history')">History</a>
+        <router-link to="/">Home</router-link>
+        <router-link to="/history">History</router-link>
       </div>
       <div v-if="user" class="user-info">
         {{ user.name }}
