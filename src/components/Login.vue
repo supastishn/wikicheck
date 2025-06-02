@@ -40,7 +40,7 @@ const handleLogin = async () => {
 
 <style scoped>
 .auth-container {
-  max-width: 500px;
+  max-width: 600px;
   margin: 2rem auto;
   padding: 2rem;
   background: var(--card-bg);
