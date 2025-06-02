@@ -2,16 +2,11 @@
 import { ref } from 'vue'
 import Navbar from './components/Navbar.vue'
 import HistoryPage from './components/HistoryPage.vue'
-import Login from './components/Login.vue'
-import Register from './components/Register.vue'
 
 const statement = ref('')
 const result = ref('')
 const isLoading = ref(false)
 const page = ref<'home' | 'history'>('home')
-
-const showAuthModal = ref(false)
-const authMode = ref<'login' | 'register'>('login')
 
 const checkStatement = () => {
   if (!statement.value.trim()) return
@@ -32,21 +27,11 @@ function handleNavigate(to: string) {
   if (to === 'history') page.value = 'history'
   else page.value = 'home'
 }
-
-function handleAuthClose() {
-  showAuthModal.value = false
-}
-
-function handleShowAuth(mode: 'login' | 'register') {
-  authMode.value = mode
-  showAuthModal.value = true
-}
 </script>
 
 <template>
   <Navbar 
-    @navigate="handleNavigate" 
-    @show-auth="handleShowAuth"
+    @navigate="handleNavigate"
   />
   <div v-if="page === 'home'" class="fact-checker">
     <h1>Fact Checker</h1>
@@ -71,21 +56,6 @@ function handleShowAuth(mode: 'login' | 'register') {
     </div>
   </div>
   <HistoryPage v-else />
-
-  <!-- Auth Modal -->
-  <div v-if="showAuthModal" class="modal">
-    <div class="modal-content">
-      <button class="close-btn" @click="handleAuthClose">×</button>
-      <Login 
-        v-if="authMode === 'login'" 
-        @toggle="authMode = 'register'"
-      />
-      <Register 
-        v-else 
-        @toggle="authMode = 'login'"
-      />
-    </div>
-  </div>
 </template>
 
 <style scoped>
@@ -147,34 +117,4 @@ button:not(:disabled):hover {
 }
 
 /* Navbar styles moved to Navbar.vue */
-
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background: white;
-  border-radius: 8px;
-  padding: 2rem;
-  position: relative;
-}
-
-.close-btn {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 1.5rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
 </style>

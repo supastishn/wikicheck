@@ -12,7 +12,8 @@
       </div>
       <button type="submit">Log in</button>
       <p class="auth-link">
-        Don't have an account? <router-link to="/register">Register</router-link>
+        Don't have an account? 
+        <router-link to="/register">Register</router-link>
       </p>
     </form>
   </div>

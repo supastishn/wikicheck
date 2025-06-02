@@ -11,8 +11,8 @@
         <button @click="logout" class="logout-btn">Logout</button>
       </div>
       <div v-else class="auth-buttons">
-        <button @click="$emit('show-auth', 'login')" class="auth-btn">Login</button>
-        <button @click="$emit('show-auth', 'register')" class="auth-btn primary">Register</button>
+        <router-link to="/login" class="auth-btn">Login</router-link>
+        <router-link to="/register" class="auth-btn primary">Register</router-link>
       </div>
       <button class="mode-toggle" @click="toggleMode">
         {{ isDark ? '🌙 Dark' : '☀️ Light' }}
