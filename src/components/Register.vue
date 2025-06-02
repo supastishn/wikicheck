@@ -41,7 +41,7 @@ const handleRegister = async () => {
   errorMessage.value = '';
   try {
     await account.create('unique()', email.value, password.value, name.value);
-    await account.createEmailSession(email.value, password.value);
+    await account.createEmailPasswordSession(email.value, password.value);
     router.push('/');
   } catch (error: any) {
     errorMessage.value = error.message || 'Registration failed. Please try again.';

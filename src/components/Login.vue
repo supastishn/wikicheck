@@ -41,7 +41,7 @@ const handleLogin = async () => {
   }
 
   try {
-    await account.createEmailSession(email.value, password.value);
+    await account.createEmailPasswordSession(email.value, password.value);
     router.push('/');
   } catch (error: any) {
     errorMessage.value = error.message || 'Login failed. Please check your credentials.';
