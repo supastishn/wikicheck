@@ -1,24 +1,27 @@
 <template>
   <div class="landing-page">
     <div class="hero">
-      <h1>WikiCheck Fact Verification</h1>
-      <p>Instantly verify claims with reliable sources</p>
+      <h1>Unlock <span class="highlight">Reliable Fact Verification</span></h1>
+      <p>AI-powered verification backed by credible sources</p>
       <div class="cta">
-        <router-link to="/fact-check" class="cta-primary">Try Now</router-link>
-        <router-link to="/login" class="cta-secondary">Log In</router-link>
+        <router-link to="/fact-check" class="cta-btn primary">Try Now</router-link>
+        <router-link to="/login" class="cta-btn secondary">Log In</router-link>
       </div>
     </div>
-    
+
     <div class="features">
-      <div class="feature-card">
-        <h2>Fast Verification</h2>
-        <p>Get real-time fact-checks in seconds using advanced AI</p>
+      <div class="feature-card glass">
+        <div class="icon">🔥</div>
+        <h2>Instant Verification</h2>
+        <p>Real-time results powered by AI technology</p>
       </div>
-      <div class="feature-card">
+      <div class="feature-card glass">
+        <div class="icon">🔗</div>
         <h2>Reliable Sources</h2>
         <p>Verified by multiple trusted references</p>
       </div>
-      <div class="feature-card">
+      <div class="feature-card glass">
+        <div class="icon">🕑</div>
         <h2>History Tracking</h2>
         <p>Save and review your verification history</p>
       </div>
@@ -34,9 +37,12 @@
 }
 
 .hero {
+  background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+  border-radius: var(--rounded-md);
+  color: white;
+  padding: 5rem 2rem;
+  margin-bottom: 4rem;
   text-align: center;
-  padding: 4rem 0;
-  margin-bottom: 3rem;
 }
 
 .hero h1 {
@@ -44,9 +50,16 @@
   margin-bottom: 1rem;
 }
 
+.highlight {
+  background: linear-gradient(90deg, #f72585, #b5179e);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
 .hero p {
   font-size: 1.2rem;
-  color: #888;
+  color: #e0e0e0;
   margin-bottom: 2rem;
 }
 
@@ -56,30 +69,34 @@
   gap: 1rem;
 }
 
-.cta-primary, .cta-secondary {
-  padding: 0.8rem 2rem;
-  border-radius: 4px;
+.cta-btn {
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 0.9rem 2.5rem;
+  border-radius: var(--rounded-full);
   text-decoration: none;
-  font-weight: 500;
   transition: all 0.2s;
+  display: inline-block;
 }
 
-.cta-primary {
-  background: #646cff;
+.cta-btn.primary {
+  background: linear-gradient(145deg, #03c803, #028802);
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+.cta-btn.primary:hover {
+  background: linear-gradient(145deg, #028802, #03c803);
+}
+
+.cta-btn.secondary {
+  background: transparent;
+  border: 2px solid white;
   color: white;
 }
 
-.cta-primary:hover {
-  background: #535bf2;
-}
-
-.cta-secondary {
-  border: 1px solid #646cff;
-  color: #646cff;
-}
-
-.cta-secondary:hover {
-  background: rgba(100, 108, 255, 0.1);
+.cta-btn.secondary:hover {
+  background: rgba(255,255,255,0.1);
 }
 
 .features {
@@ -89,14 +106,30 @@
 }
 
 .feature-card {
-  padding: 1.5rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
   background: var(--card-bg);
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  border-radius: var(--rounded-md);
+  box-shadow: var(--shadow-md);
   transition: transform 0.3s;
 }
 
 .feature-card:hover {
   transform: translateY(-5px);
+}
+
+.icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 </style>

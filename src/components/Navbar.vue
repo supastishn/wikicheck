@@ -83,7 +83,10 @@ onMounted(async () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #646cff;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   color: #fff;
   padding: 1rem 2rem;
   margin-bottom: 0;
@@ -93,9 +96,9 @@ onMounted(async () => {
 
 .mode-toggle {
   margin-left: 2rem;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.1);
   color: #fff;
-  border: 1px solid #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
   padding: 0.4em 1em;
   font-size: 1em;
@@ -127,7 +130,6 @@ onMounted(async () => {
   color: #ffd700;
 }
 
-/* Add after existing styles */
 .user-info {
   display: flex;
   align-items: center;
@@ -146,6 +148,10 @@ onMounted(async () => {
   align-items: center;
   font-weight: bold;
   cursor: pointer;
+  transition: transform 0.3s;
+}
+.profile-circle:hover {
+  transform: scale(1.1);
 }
 
 .auth-buttons {
@@ -160,6 +166,7 @@ onMounted(async () => {
   border: 1px solid white;
   border-radius: 4px;
   cursor: pointer;
+  transition: background 0.2s, color 0.2s;
 }
 
 .auth-btn.primary {

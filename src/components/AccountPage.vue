@@ -1,5 +1,5 @@
 <template>
-  <div class="account-page">
+  <div class="account-page glass">
     <h2>Account</h2>
     <div v-if="user" class="profile-card">
       <div class="profile-initials">
@@ -10,7 +10,7 @@
         <p><strong>Email:</strong> {{ user.email }}</p>
       </div>
     </div>
-    <button @click="logout" class="logout-btn">Log out</button>
+    <button @click="logout" class="logout-btn btn">Log out</button>
   </div>
 </template>
 
@@ -53,6 +53,9 @@ const logout = async () => {
   margin: 2rem auto;
   padding: 2rem;
   text-align: center;
+  background: var(--card-bg);
+  border-radius: var(--rounded-md);
+  box-shadow: var(--shadow-md);
 }
 
 .profile-card {
@@ -61,9 +64,10 @@ const logout = async () => {
   gap: 1.5rem;
   margin-bottom: 2rem;
   padding: 1.5rem;
-  background: var(--card-bg);
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: var(--rounded-md);
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 .profile-initials {
@@ -77,6 +81,7 @@ const logout = async () => {
   align-items: center;
   font-size: 2rem;
   font-weight: bold;
+  box-shadow: var(--shadow-md);
 }
 
 .profile-details {
@@ -89,8 +94,16 @@ const logout = async () => {
   background: #ff4d4f;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: var(--rounded-full);
   cursor: pointer;
   font-size: 1rem;
+  box-shadow: var(--shadow-md);
+  margin-top: 1rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.logout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
 }
 </style>

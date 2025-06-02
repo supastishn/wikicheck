@@ -1,5 +1,5 @@
 <template>
-  <div class="auth-container">
+  <div class="auth-container glass">
     <h2>Create Account</h2>
     <form @submit.prevent="handleRegister">
       <div v-if="errorMessage" class="error-message">
@@ -17,7 +17,7 @@
         <label for="password">Password</label>
         <input v-model="password" type="password" id="password" required>
       </div>
-      <button type="submit">Create Account</button>
+      <button type="submit" class="btn">Create Account</button>
       <p class="auth-link">
         Already have an account?
         <router-link to="/login">Log in</router-link>
@@ -51,49 +51,54 @@ const handleRegister = async () => {
 
 <style scoped>
 .auth-container {
-  max-width: 600px;
+  max-width: 500px;
   min-width: 40vw;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 3rem;
   background: var(--card-bg);
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  border-radius: var(--rounded-md);
+  box-shadow: var(--shadow-md);
 }
 
 @media (max-width: 768px) {
   .auth-container {
     width: 95%;
     min-width: unset;
+    padding: 2rem;
   }
 }
 
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   max-width: 600px;
-  margin: 0 auto 1rem auto;
+  margin: 0 auto 1.5rem auto;
 }
 
 label {
   display: block;
   margin-bottom: 0.5rem;
+  color: var(--text-light);
+  font-weight: 500;
 }
 
 input {
   width: 85%;
-  padding: 0.8rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: var(--text-dark);
+  border-radius: var(--rounded-full);
   font-size: 1rem;
+  transition: border 0.2s;
 }
 
-button {
-  padding: 0.8rem;
-  background: #646cff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
+input:focus {
+  border: 1.5px solid var(--primary);
+  outline: none;
+}
+
+button, .btn {
   margin-top: 1rem;
 }
 
@@ -105,12 +110,12 @@ button {
 }
 
 .error-message {
-  color: #ff4d4f;
+  color: var(--error);
   background-color: #fff2f0;
   border: 1px solid #ffccc7;
   padding: 1rem;
-  border-radius: 4px;
+  border-radius: var(--rounded-sm);
   margin-bottom: 1rem;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
 }
 </style>
