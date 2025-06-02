@@ -5,8 +5,6 @@
       <div class="navbar-links">
         <a href="#" @click.prevent="$emit('navigate', 'home')">Home</a>
         <a href="#" @click.prevent="$emit('navigate', 'history')">History</a>
-        <a href="#">About</a>
-        <a href="#">Contact</a>
       </div>
       <button class="mode-toggle" @click="toggleMode">
         {{ isDark ? '🌙 Dark' : '☀️ Light' }}
