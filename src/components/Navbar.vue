@@ -61,7 +61,7 @@ onMounted(() => {
   padding: 1rem 2rem;
   margin-bottom: 0;
   box-sizing: border-box;
-  border-radius: 8px;
+  border-radius: 100px;
 }
 
 .mode-toggle {
