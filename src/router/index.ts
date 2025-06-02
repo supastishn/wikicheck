@@ -32,19 +32,37 @@ const router = createRouter({
   routes
 })
 
-// Add route guard for protected routes
+ // Add route guard for protected routes
 router.beforeEach(async (to, from, next) => {
   const requiresAuth = to.meta.requiresAuth;
-  
-  if (requiresAuth) {
-    try {
-      await account.get();
-      next();
-    } catch (error) {
-      next('/login');
+  const authPages = ['/login', '/register'];
+
+  try {
+    // Attempt to get current user session
+    await account.get();
+
+    // If authenticated and trying to access auth pages
+    if (authPages.includes(to.path)) {
+      return next('/fact-check');
     }
-  } else {
-    next();
+
+    if (requiresAuth) {
+      next();
+    } else {
+      next();
+    }
+  } catch (error) {
+    // If not authenticated and trying to access protected route
+    if (requiresAuth) {
+      next('/login');
+    } else {
+      // Allow access to auth pages only when unauthenticated
+      if (authPages.includes(to.path)) {
+        next();
+      } else {
+        next(); // Allow access to other public routes
+      }
+    }
   }
 });
 
