@@ -47,7 +47,7 @@ const checkStatement = () => {
 <style scoped>
 .fact-checker {
   max-width: 600px;
-  margin: 2rem auto;
+  margin: 0 auto; /* Remove top margin */
   padding: 2rem;
   text-align: center;
 }
