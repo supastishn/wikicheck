@@ -3,12 +3,14 @@ import HomePage from '../components/HomePage.vue'
 import Login from '../components/Login.vue'
 import Register from '../components/Register.vue'
 import HistoryPage from '../components/HistoryPage.vue'
+import AccountPage from '../components/AccountPage.vue'
 
 const routes = [
   { path: '/', name: 'Home', component: HomePage },
   { path: '/login', name: 'Login', component: Login },
   { path: '/register', name: 'Register', component: Register },
-  { path: '/history', name: 'History', component: HistoryPage }
+  { path: '/history', name: 'History', component: HistoryPage },
+  { path: '/account', name: 'Account', component: AccountPage }
 ]
 
 const router = createRouter({

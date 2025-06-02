@@ -7,8 +7,11 @@
         <router-link to="/history">History</router-link>
       </div>
       <div v-if="user" class="user-info">
-        {{ user.name }}
-        <button @click="logout" class="logout-btn">Logout</button>
+        <router-link to="/account">
+          <div class="profile-circle">
+            {{ userInitials }}
+          </div>
+        </router-link>
       </div>
       <div v-else class="auth-buttons">
         <router-link to="/login" class="auth-btn">Login</router-link>
@@ -22,13 +25,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { account } from '../utils/appwrite'
 import { useRouter } from 'vue-router'
 
 const isDark = ref(false)
 const user = ref<any>(null)
 const router = useRouter()
+
+const userInitials = computed(() => {
+  if (!user.value) return ''
+  return user.value.name
+    ? user.value.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0,2)
+    : user.value.email.substring(0,2).toUpperCase()
+})
 
 function setMode(dark: boolean) {
   isDark.value = dark
@@ -54,12 +64,6 @@ onMounted(async () => {
     user.value = null
   }
 })
-
-async function logout() {
-  await account.deleteSession('current')
-  user.value = null
-  router.push('/')
-}
 </script>
 
 <style scoped>
@@ -123,18 +127,23 @@ async function logout() {
 
 /* Add after existing styles */
 .user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   color: white;
-  margin: 0 1rem;
 }
 
-.logout-btn {
-  margin-left: 0.5rem;
-  background: transparent;
-  color: white;
-  border: 1px solid white;
-  border-radius: 4px;
+.profile-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #fff;
+  color: #646cff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
   cursor: pointer;
-  padding: 0.25rem 0.5rem;
 }
 
 .auth-buttons {
