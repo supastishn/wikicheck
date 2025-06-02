@@ -48,7 +48,7 @@ const handleRegister = async () => {
 /* Same styles as Login.vue */
 .auth-container {
   max-width: 600px;
-  margin: 2rem auto;
+  margin: 8rem auto 2rem;
   padding: 2rem;
   background: var(--card-bg);
   border-radius: 8px;
