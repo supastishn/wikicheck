@@ -37,7 +37,7 @@
   padding: 1rem 2rem;
   margin-bottom: 0;
   box-sizing: border-box;
-  border-radius: 50%;
+  border-radius: 8px;
 }
 
 .navbar-title {
