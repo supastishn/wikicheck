@@ -6,6 +6,14 @@
         <a href="#" @click.prevent="$emit('navigate', 'home')">Home</a>
         <a href="#" @click.prevent="$emit('navigate', 'history')">History</a>
       </div>
+      <div v-if="user" class="user-info">
+        {{ user.name }}
+        <button @click="logout" class="logout-btn">Logout</button>
+      </div>
+      <div v-else class="auth-buttons">
+        <button @click="$emit('show-auth', 'login')" class="auth-btn">Login</button>
+        <button @click="$emit('show-auth', 'register')" class="auth-btn primary">Register</button>
+      </div>
       <button class="mode-toggle" @click="toggleMode">
         {{ isDark ? '🌙 Dark' : '☀️ Light' }}
       </button>
@@ -15,8 +23,12 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { account } from '../utils/appwrite'
+import { useRouter } from 'vue-router'
 
 const isDark = ref(false)
+const user = ref<any>(null)
+const router = useRouter()
 
 function setMode(dark: boolean) {
   isDark.value = dark
@@ -32,11 +44,22 @@ function toggleMode() {
   localStorage.setItem('wikicheck-theme', isDark.value ? 'dark' : 'light')
 }
 
-onMounted(() => {
+onMounted(async () => {
   const saved = localStorage.getItem('wikicheck-theme')
   if (saved === 'dark') setMode(true)
   else setMode(false)
+  try {
+    user.value = await account.get()
+  } catch {
+    user.value = null
+  }
 })
+
+async function logout() {
+  await account.deleteSession('current')
+  user.value = null
+  router.push('/')
+}
 </script>
 
 <style scoped>
@@ -96,5 +119,39 @@ onMounted(() => {
 
 .navbar-links a:hover {
   color: #ffd700;
+}
+
+/* Add after existing styles */
+.user-info {
+  color: white;
+  margin: 0 1rem;
+}
+
+.logout-btn {
+  margin-left: 0.5rem;
+  background: transparent;
+  color: white;
+  border: 1px solid white;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.auth-btn {
+  padding: 0.4rem 0.8rem;
+  background: transparent;
+  color: white;
+  border: 1px solid white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.auth-btn.primary {
+  background: rgba(255,255,255,0.2);
 }
 </style>

@@ -11,6 +11,13 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --card-bg: #ffffff;
+}
+
+html.dark {
+  color-scheme: dark;
+  background: #242424;
+  --card-bg: #1e1e1e;
 }
 
 html.dark {
