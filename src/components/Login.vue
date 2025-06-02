@@ -2,6 +2,9 @@
   <div class="auth-container">
     <h2>Login to WikiCheck</h2>
     <form @submit.prevent="handleLogin">
+      <div v-if="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
       <div class="form-group">
         <label for="email">Email</label>
         <input v-model="email" type="email" id="email" required>
@@ -26,14 +29,22 @@ import { useRouter } from 'vue-router';
 
 const email = ref('');
 const password = ref('');
+const errorMessage = ref('');
 const router = useRouter();
 
 const handleLogin = async () => {
+  errorMessage.value = '';
+
+  if (!email.value.trim() || !password.value) {
+    errorMessage.value = 'Please enter both email and password';
+    return;
+  }
+
   try {
     await account.createEmailSession(email.value, password.value);
     router.push('/');
-  } catch (error) {
-    alert('Login failed. Please check your credentials.');
+  } catch (error: any) {
+    errorMessage.value = error.message || 'Login failed. Please check your credentials.';
   }
 };
 </script>
@@ -89,5 +100,15 @@ button {
   margin: 0 auto;
   text-align: center;
   margin-top: 1rem;
+}
+
+.error-message {
+  color: #ff4d4f;
+  background-color: #fff2f0;
+  border: 1px solid #ffccc7;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
 }
 </style>

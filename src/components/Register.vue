@@ -2,6 +2,9 @@
   <div class="auth-container">
     <h2>Create Account</h2>
     <form @submit.prevent="handleRegister">
+      <div v-if="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
       <div class="form-group">
         <label for="name">Name</label>
         <input v-model="name" type="text" id="name" required>
@@ -31,15 +34,17 @@ import { useRouter } from 'vue-router';
 const name = ref('');
 const email = ref('');
 const password = ref('');
+const errorMessage = ref('');
 const router = useRouter();
 
 const handleRegister = async () => {
+  errorMessage.value = '';
   try {
     await account.create('unique()', email.value, password.value, name.value);
     await account.createEmailSession(email.value, password.value);
     router.push('/');
-  } catch (error) {
-    alert('Registration failed. Please try again.');
+  } catch (error: any) {
+    errorMessage.value = error.message || 'Registration failed. Please try again.';
   }
 };
 </script>
@@ -95,5 +100,15 @@ button {
   margin: 0 auto;
   text-align: center;
   margin-top: 1rem;
+}
+
+.error-message {
+  color: #ff4d4f;
+  background-color: #fff2f0;
+  border: 1px solid #ffccc7;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
 }
 </style>
