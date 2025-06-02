@@ -7,12 +7,37 @@
         <a href="#">About</a>
         <a href="#">Contact</a>
       </div>
+      <button class="mode-toggle" @click="toggleMode">
+        {{ isDark ? '🌙 Dark' : '☀️ Light' }}
+      </button>
     </nav>
   </div>
 </template>
 
 <script setup lang="ts">
-// No script logic needed for static navbar
+import { ref, onMounted } from 'vue'
+
+const isDark = ref(false)
+
+function setMode(dark: boolean) {
+  isDark.value = dark
+  if (dark) {
+    document.documentElement.classList.add('dark')
+  } else {
+    document.documentElement.classList.remove('dark')
+  }
+}
+
+function toggleMode() {
+  setMode(!isDark.value)
+  localStorage.setItem('wikicheck-theme', isDark.value ? 'dark' : 'light')
+}
+
+onMounted(() => {
+  const saved = localStorage.getItem('wikicheck-theme')
+  if (saved === 'dark') setMode(true)
+  else setMode(false)
+})
 </script>
 
 <style scoped>
@@ -38,6 +63,22 @@
   margin-bottom: 0;
   box-sizing: border-box;
   border-radius: 8px;
+}
+
+.mode-toggle {
+  margin-left: 2rem;
+  background: transparent;
+  color: #fff;
+  border: 1px solid #fff;
+  border-radius: 6px;
+  padding: 0.4em 1em;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.mode-toggle:hover {
+  background: #fff;
+  color: #646cff;
 }
 
 .navbar-title {
