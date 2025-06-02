@@ -3,7 +3,7 @@
     <nav class="navbar">
       <div class="navbar-title">WikiCheck</div>
       <div class="navbar-links">
-        <router-link to="/">Home</router-link>
+        <router-link to="/fact-check">Fact Check</router-link>
         <router-link to="/history">History</router-link>
       </div>
       <div v-if="user" class="user-info">
