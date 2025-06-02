@@ -1,7 +1,7 @@
 <template>
   <div class="padding">
     <nav class="navbar">
-      <div class="navbar-title">WikiCheck</div>
+      <router-link to="/" class="navbar-title">WikiCheck</router-link>
       <div class="navbar-links">
         <router-link to="/fact-check">Fact Check</router-link>
         <router-link to="/history">History</router-link>
@@ -111,6 +111,8 @@ onMounted(async () => {
   font-size: 1.5rem;
   font-weight: bold;
   letter-spacing: 1px;
+  color: #fff;
+  text-decoration: none;
 }
 
 .navbar-links a {
