@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import Navbar from './components/Navbar.vue'
+import HistoryPage from './components/HistoryPage.vue'
 
 const statement = ref('')
 const result = ref('')
 const isLoading = ref(false)
+const page = ref<'home' | 'history'>('home')
 
 const checkStatement = () => {
   if (!statement.value.trim()) return
@@ -20,11 +22,16 @@ const checkStatement = () => {
     isLoading.value = false
   }, 800)
 }
+
+function handleNavigate(to: string) {
+  if (to === 'history') page.value = 'history'
+  else page.value = 'home'
+}
 </script>
 
 <template>
-  <Navbar />
-  <div class="fact-checker">
+  <Navbar @navigate="handleNavigate" />
+  <div v-if="page === 'home'" class="fact-checker">
     <h1>Fact Checker</h1>
     
     <div class="input-container">
@@ -46,6 +53,7 @@ const checkStatement = () => {
       {{ result }}
     </div>
   </div>
+  <HistoryPage v-else />
 </template>
 
 <style scoped>

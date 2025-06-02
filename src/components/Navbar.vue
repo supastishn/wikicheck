@@ -3,7 +3,8 @@
     <nav class="navbar">
       <div class="navbar-title">WikiCheck</div>
       <div class="navbar-links">
-        <a href="#">Home</a>
+        <a href="#" @click.prevent="$emit('navigate', 'home')">Home</a>
+        <a href="#" @click.prevent="$emit('navigate', 'history')">History</a>
         <a href="#">About</a>
         <a href="#">Contact</a>
       </div>
