@@ -47,12 +47,20 @@ const handleRegister = async () => {
 <style scoped>
 /* Same styles as Login.vue */
 .auth-container {
-  max-width: 1200px;
+  min-width: 1200px;
   margin: 8rem auto 2rem;
   padding: 2rem;
   background: var(--card-bg);
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Add media query for responsive scaling */
+@media (max-width: 1300px) {
+  .auth-container {
+    min-width: 100%;
+    margin: 8rem 1rem 2rem;
+  }
 }
 
 .form-group {
