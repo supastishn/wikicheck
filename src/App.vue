@@ -23,6 +23,14 @@ const checkStatement = () => {
 
 <template>
   <div class="fact-checker">
+    <nav class="navbar">
+      <div class="navbar-title">WikiCheck</div>
+      <div class="navbar-links">
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+      </div>
+    </nav>
     <h1>Fact Checker</h1>
     
     <div class="input-container">
@@ -102,5 +110,34 @@ button:not(:disabled):hover {
   font-weight: 500;
   min-height: 60px;
   border: 1px solid #eaeaea;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #646cff;
+  color: #fff;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.navbar-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.navbar-links a {
+  color: #fff;
+  text-decoration: none;
+  margin-left: 1.5rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.navbar-links a:hover {
+  color: #ffd700;
 }
 </style>
