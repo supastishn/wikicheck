@@ -22,10 +22,23 @@ export default async ({ req, res }) => {
       },
     });
     
-    return res.json({
-      text: result.text(),
-      groundingMetadata: result.candidates[0]?.groundingMetadata || null
-    });
+    // Compose XML response
+    const candidate = result.candidates?.[0] || {};
+    const status = candidate.safetyRatings?.[0]?.category === "SAFE" ? "Verified Fact" : "False Information";
+    const color = candidate.safetyRatings?.[0]?.category === "SAFE" ? "green" : "red";
+    const explanation = result.text();
+    const sources = candidate.groundingMetadata?.searchEntryPoint?.renderedContent || "";
+
+    const xml = `
+      <factcheck>
+        <status>${status}</status>
+        <color>${color}</color>
+        <explanation>${explanation.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</explanation>
+        <sources>${sources.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</sources>
+      </factcheck>
+    `.trim();
+
+    return res.send(xml, 200, { 'Content-Type': 'application/xml' });
     
   } catch (error) {
     return res.json({ 

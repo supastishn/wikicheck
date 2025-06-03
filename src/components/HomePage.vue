@@ -1,21 +1,44 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { functions } from '../utils/appwrite'
 
 const statement = ref('')
-const result = ref('')
+const result = ref<any>(null)
 const isLoading = ref(false)
 
-const checkStatement = () => {
+const checkStatement = async () => {
   if (!statement.value.trim()) return
 
   isLoading.value = true
-  result.value = ''
+  result.value = null
 
-  setTimeout(() => {
-    const isFact = Math.random() > 0.5
-    result.value = isFact ? '✅ Verified Fact' : '❌ False Information'
+  try {
+    const res = await functions.createExecution(
+      'llm-search',
+      JSON.stringify({ statement: statement.value })
+    )
+
+    if (res.responseBody) {
+      const parser = new DOMParser()
+      const xmlDoc = parser.parseFromString(res.responseBody, "application/xml")
+
+      result.value = {
+        color: xmlDoc.querySelector('color')?.textContent || 'black',
+        status: xmlDoc.querySelector('status')?.textContent || 'Unknown',
+        explanation: xmlDoc.querySelector('explanation')?.textContent || '',
+        sources: xmlDoc.querySelector('sources')?.textContent || ''
+      }
+    }
+  } catch (error) {
+    console.error('Verification failed', error)
+    result.value = {
+      color: 'black',
+      status: 'Error',
+      explanation: 'Failed to verify statement'
+    }
+  } finally {
     isLoading.value = false
-  }, 800)
+  }
 }
 </script>
 
@@ -39,7 +62,16 @@ const checkStatement = () => {
     </div>
 
     <div v-if="result" class="result">
-      {{ result }}
+      <div class="status" :style="{ color: result.color }">
+        {{ result.status }}
+      </div>
+      <div class="explanation">
+        {{ result.explanation }}
+      </div>
+      <div v-if="result.sources" class="sources">
+        <h3>Sources</h3>
+        <pre>{{ result.sources }}</pre>
+      </div>
     </div>
   </div>
 </template>
