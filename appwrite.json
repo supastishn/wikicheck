@@ -89,35 +89,41 @@
                     "key": "statement",
                     "type": "string",
                     "size": 1024,
-                    "required": true
+                    "required": true,
+                    "array": false
                 },
                 {
                     "key": "user_id",
                     "type": "string",
                     "size": 36,
-                    "required": true
+                    "required": true,
+                    "array": false
                 },
                 {
                     "key": "status",
                     "type": "string",
                     "size": 64,
-                    "required": true
+                    "required": true,
+                    "array": false
                 },
                 {
                     "key": "explanation",
                     "type": "text",
-                    "required": true
+                    "required": true,
+                    "array": false
                 },
                 {
                     "key": "sources",
                     "type": "text",
-                    "required": false
+                    "required": false,
+                    "array": false
                 },
                 {
                     "key": "color",
                     "type": "string",
                     "size": 24,
-                    "required": true
+                    "required": true,
+                    "array": false
                 }
             ],
             "indexes": []
