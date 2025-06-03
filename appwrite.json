@@ -108,12 +108,14 @@
                 {
                     "key": "explanation",
                     "type": "text",
+                    "size": 100000,
                     "required": true,
                     "array": false
                 },
                 {
                     "key": "sources",
                     "type": "text",
+                    "size": 50000,
                     "required": false,
                     "array": false
                 },
