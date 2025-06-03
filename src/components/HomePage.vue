@@ -20,7 +20,8 @@ const checkStatement = async () => {
       JSON.stringify({ statement: statement.value }),
       false,
       '/',
-      'post',
+      // @ts-ignore
+      'POST',
       {'Content-Type': 'application/json'}
     )
 
