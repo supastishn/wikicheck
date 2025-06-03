@@ -20,12 +20,12 @@ const checkStatement = async () => {
       JSON.stringify({ statement: statement.value }),
       false,
       '/',
-      'POST' as const,
+      'post',
       {'Content-Type': 'application/json'}
     )
 
     // Handle error responses first
-    if (res.statusCode !== 200) {
+    if (res.responseStatusCode !== 200) {
       try {
         if (res.responseBody) {
           const errorResponse = JSON.parse(res.responseBody);
