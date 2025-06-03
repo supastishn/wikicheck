@@ -57,7 +57,7 @@
                 "log.write"
             ],
             "schedule": "",
-            "timeout": 15,
+            "timeout": 120,
             "enabled": true,
             "logging": true,
             "entrypoint": "src/main.js",
