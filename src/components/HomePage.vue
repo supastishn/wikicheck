@@ -4,6 +4,7 @@ import { functions } from '../utils/appwrite'
 
 const statement = ref('')
 const result = ref<any>(null)
+const errorResult = ref<string | null>(null)
 const isLoading = ref(false)
 
 const checkStatement = async () => {
@@ -11,12 +12,18 @@ const checkStatement = async () => {
 
   isLoading.value = true
   result.value = null
+  errorResult.value = null
 
   try {
     const res = await functions.createExecution(
       'llm-search',
       JSON.stringify({ statement: statement.value })
     )
+
+    if (res.status === 400 && res.responseBody && res.responseBody.includes('statement')) {
+      const errorResponse = JSON.parse(res.responseBody)
+      throw new Error(errorResponse.error)
+    }
 
     if (res.responseBody) {
       const parser = new DOMParser()
@@ -31,10 +38,14 @@ const checkStatement = async () => {
     }
   } catch (error) {
     console.error('Verification failed', error)
-    result.value = {
-      color: 'black',
-      status: 'Error',
-      explanation: 'Failed to verify statement'
+    if (error instanceof Error && error.message.includes('statement')) {
+      errorResult.value = error.message
+    } else {
+      result.value = {
+        color: 'black',
+        status: 'Error',
+        explanation: 'Failed to verify statement'
+      }
     }
   } finally {
     isLoading.value = false
@@ -72,6 +83,10 @@ const checkStatement = async () => {
         <h3>Sources</h3>
         <pre>{{ result.sources }}</pre>
       </div>
+    </div>
+    <div v-else-if="errorResult" class="result error">
+      <div class="status" style="color: black">Error</div>
+      <div class="explanation">{{ errorResult }}</div>
     </div>
   </div>
 </template>
