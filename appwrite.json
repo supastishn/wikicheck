@@ -107,14 +107,14 @@
                 },
                 {
                     "key": "explanation",
-                    "type": "text",
+                    "type": "string",
                     "size": 100000,
                     "required": true,
                     "array": false
                 },
                 {
                     "key": "sources",
-                    "type": "text",
+                    "type": "string",
                     "size": 50000,
                     "required": false,
                     "array": false
