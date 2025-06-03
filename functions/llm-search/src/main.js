@@ -69,11 +69,17 @@ Provide web sources to support your classification.`;
     const responseText = result.text || "";
     const categoryMatch = responseText.match(/Category:\s*(.+)/i);
     const explanationMatch = responseText.match(/Explanation:\s*([\s\S]*?)(?:\n|$)/i);
-    // Try to extract sources after "Sources:" or "Web sources:" or at the end
-    let sources = "";
-    const sourcesMatch = responseText.match(/Sources?:\s*([\s\S]*)/i) || responseText.match(/Web sources?:\s*([\s\S]*)/i);
-    if (sourcesMatch) {
-      sources = sourcesMatch[1].trim();
+
+    // Extract sources from Gemini's groundingMetadata.groundingChunks
+    let sources = [];
+    if (result.candidates?.[0]?.groundingMetadata?.groundingChunks) {
+      sources = [
+        ...new Set(
+          result.candidates[0].groundingMetadata.groundingChunks
+            .filter(chunk => chunk.web?.uri)
+            .map(chunk => chunk.web.uri)
+        )
+      ];
     }
 
     let status = "Unknown";
@@ -101,15 +107,6 @@ Provide web sources to support your classification.`;
       }
     }
 
-    const xml = `
-      <factcheck>
-        <status>${status}</status>
-        <color>${color}</color>
-        <explanation>${explanation.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</explanation>
-        <sources>${sources.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</sources>
-      </factcheck>
-    `.trim();
-
     // Get authenticated user ID
     const userId = req.headers['x-appwrite-user-id'];
 
@@ -124,7 +121,7 @@ Provide web sources to support your classification.`;
           statement: statement,
           status: status,
           explanation: explanation,
-          sources: sources,
+          sources: Array.isArray(sources) ? sources.join('\n') : sources,
           color: color
         }
       );
@@ -132,7 +129,15 @@ Provide web sources to support your classification.`;
       console.error("Failed to save fact check", dbError.message);
     }
 
-    return res.send(xml, 200, { 'Content-Type': 'application/xml' });
+    // XML response with new sources array
+    return res.send(`
+      <factcheck>
+        <status>${status}</status>
+        <color>${color}</color>
+        <explanation>${explanation.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</explanation>
+        <sources>${(Array.isArray(sources) ? sources.join('\n') : sources).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</sources>
+      </factcheck>
+    `.trim(), 200, { 'Content-Type': 'application/xml' });
 
   } catch (error) {
     return res.json({
