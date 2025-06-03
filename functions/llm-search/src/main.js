@@ -42,9 +42,9 @@ export default async ({ req, res }) => {
 
     const result = await ai.models.generateContent({
       model: "gemini-2.5-flash-preview-05-20",
-      contents: [statement],
+      contents: [{parts: [{text: statement}]}],
       config: {
-        tools: [{ googleSearch: {} }],
+        tools: [{googleSearch: {}}],
       },
     });
 
@@ -52,7 +52,7 @@ export default async ({ req, res }) => {
     const candidate = result.candidates?.[0] || {};
     const status = candidate.safetyRatings?.[0]?.category === "SAFE" ? "Verified Fact" : "False Information";
     const color = candidate.safetyRatings?.[0]?.category === "SAFE" ? "green" : "red";
-    const explanation = result.text();
+    const explanation = result.text || "";
     const sources = candidate.groundingMetadata?.searchEntryPoint?.renderedContent || "";
 
     const xml = `
