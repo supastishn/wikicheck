@@ -29,7 +29,7 @@ export default async ({ req, res }) => {
     const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
     const result = await ai.models.generateContent({
-      model: "gemini-1.5-flash",
+      model: "gemini-2.5-flash-preview-05-20",
       contents: [statement],
       config: {
         tools: [{ googleSearch: {} }],
