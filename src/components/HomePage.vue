@@ -20,25 +20,47 @@ const checkStatement = async () => {
       JSON.stringify({ statement: statement.value })
     )
 
-    if (res.status === 400 && res.responseBody && res.responseBody.includes('statement')) {
-      const errorResponse = JSON.parse(res.responseBody)
-      throw new Error(errorResponse.error)
+    // Handle error responses first
+    if (res.status !== 200) {
+      try {
+        if (res.responseBody) {
+          const errorResponse = JSON.parse(res.responseBody);
+          if (errorResponse.error) {
+            throw new Error(errorResponse.error);
+          }
+        }
+      } catch (e) {
+        // Fall through to XML parsing
+      }
     }
 
     if (res.responseBody) {
-      const parser = new DOMParser()
-      const xmlDoc = parser.parseFromString(res.responseBody, "application/xml")
+      // Check if response is XML
+      if (res.responseBody.startsWith('<factcheck>')) {
+        const parser = new DOMParser()
+        const xmlDoc = parser.parseFromString(res.responseBody, "application/xml")
 
-      result.value = {
-        color: xmlDoc.querySelector('color')?.textContent || 'black',
-        status: xmlDoc.querySelector('status')?.textContent || 'Unknown',
-        explanation: xmlDoc.querySelector('explanation')?.textContent || '',
-        sources: xmlDoc.querySelector('sources')?.textContent || ''
+        result.value = {
+          color: xmlDoc.querySelector('color')?.textContent || 'black',
+          status: xmlDoc.querySelector('status')?.textContent || 'Unknown',
+          explanation: xmlDoc.querySelector('explanation')?.textContent || '',
+          sources: xmlDoc.querySelector('sources')?.textContent || ''
+        }
+      } else {
+        // Handle JSON errors that didn't parse above
+        try {
+          const errorResponse = JSON.parse(res.responseBody);
+          throw new Error(errorResponse.error || 'Unknown error from server');
+        } catch (e) {
+          throw new Error('Invalid response format from server');
+        }
       }
+    } else {
+      throw new Error('Empty response from server');
     }
   } catch (error) {
     console.error('Verification failed', error)
-    if (error instanceof Error && error.message.includes('statement')) {
+    if (error instanceof Error) {
       errorResult.value = error.message
     } else {
       result.value = {
