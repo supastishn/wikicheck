@@ -1,7 +1,7 @@
 <template>
   <div class="padding">
     <nav class="navbar">
-      <router-link to="/" class="navbar-title">WikiCheck</router-link>
+      <router-link to="/" class="navbar-title">Wikicheck</router-link>
       <div class="navbar-links">
         <router-link to="/fact-check">Fact Check</router-link>
         <router-link to="/history">History</router-link>
