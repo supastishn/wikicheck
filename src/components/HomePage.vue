@@ -19,7 +19,7 @@ const checkStatement = async () => {
       'llm-search',
       JSON.stringify({ statement: statement.value }),
       false,
-      '',
+      '/',
       'POST',
       {'Content-Type': 'application/json'}
     )
