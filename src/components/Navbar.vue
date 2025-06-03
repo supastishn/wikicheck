@@ -87,7 +87,7 @@ onMounted(async () => {
   backdrop-filter: blur(10px);
   box-shadow: var(--shadow-sm);
   border: 1px solid rgba(255, 255, 255, 0.18);
-  color: #fff;
+  color: var(--text-dark);
   padding: 1rem 2rem;
   margin-bottom: 0;
   box-sizing: border-box;
@@ -97,7 +97,7 @@ onMounted(async () => {
 .mode-toggle {
   margin-left: 2rem;
   background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  color: var(--text-dark);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
   padding: 0.4em 1em;
@@ -114,12 +114,12 @@ onMounted(async () => {
   font-size: 1.5rem;
   font-weight: bold;
   letter-spacing: 1px;
-  color: #fff;
+  color: var(--text-dark);
   text-decoration: none;
 }
 
 .navbar-links a {
-  color: #fff;
+  color: var(--text-dark);
   text-decoration: none;
   margin-left: 1.5rem;
   font-weight: 500;
@@ -134,7 +134,7 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: white;
+  color: var(--text-dark);
 }
 
 .profile-circle {
@@ -162,7 +162,7 @@ onMounted(async () => {
 .auth-btn {
   padding: 0.4rem 0.8rem;
   background: transparent;
-  color: white;
+  color: var(--text-dark);
   border: 1px solid white;
   border-radius: 4px;
   cursor: pointer;
