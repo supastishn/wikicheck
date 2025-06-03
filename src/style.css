@@ -1,24 +1,24 @@
 :root {
   /* Modern color scheme */
-  --primary: #4361ee;
-  --secondary: #7209b7;
-  --accent: #4cc9f0;
-  --background: #f8f9fa;
-  --card-bg: #ffffff;
-  --text-dark: #212529;
-  --text-light: #495057;
-  --success: #4caf50;
-  --error: #f44336;
-  --warning: #ff9800;
+  --primary: #6366f1;
+  --secondary: #8b5cf6;
+  --accent: #06b6d4;
+  --background: #f8fafc;
+  --card-bg: rgba(255, 255, 255, 0.8);
+  --text-dark: #1e293b;
+  --text-light: #64748b;
+  --success: #22c55e;
+  --error: #ef4444;
+  --warning: #f59e0b;
 
-  /* New shadows for depth */
-  --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
-  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  /* Glassmorphism shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(99, 102, 241, 0.15);
+  --shadow-lg: 0 8px 24px rgba(99, 102, 241, 0.25);
 
   /* Rounding */
-  --rounded-sm: 10px;
-  --rounded-md: 16px;
+  --rounded-sm: 12px;
+  --rounded-md: 20px;
   --rounded-full: 9999px;
 
   font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
@@ -36,16 +36,15 @@
 }
 
 :root.dark, html.dark {
-  --background: #121212;
-  --card-bg: #1e1e1e;
-  --text-dark: #e0e0e0;
-  --text-light: #b0b0b0;
+  --background: #0f172a;
+  --card-bg: rgba(30, 41, 59, 0.8);
+  --text-dark: #f1f5f9;
+  --text-light: #cbd5e1;
   color-scheme: dark;
-  background: #242424;
 }
 
 body {
-  background: linear-gradient(135deg, var(--background) 0%, #e0e5ec 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
   font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   margin: 0;
   display: flex;
@@ -56,32 +55,28 @@ body {
 
 html.dark body {
   color: var(--text-dark);
-  background: linear-gradient(135deg, var(--background) 0%, #23272f 100%);
-}
-
-html:not(.dark) {
-  color-scheme: light;
-  background: #fff;
-}
-
-html:not(.dark) body {
-  color: var(--text-dark);
-  background: linear-gradient(135deg, var(--background) 0%, #e0e5ec 100%);
+  background: linear-gradient(135deg, #1e1b4b 0%, #3b0764 100%);
 }
 
 a {
   font-weight: 500;
   color: var(--primary);
   text-decoration: inherit;
-  transition: color 0.2s;
+  transition: all 0.2s;
 }
+
 a:hover {
   color: var(--secondary);
+  transform: translateY(-1px);
 }
 
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  background: linear-gradient(to right, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 button, .btn {
@@ -89,34 +84,46 @@ button, .btn {
   color: white;
   border: none;
   border-radius: var(--rounded-full);
-  padding: 12px 24px;
-  font-weight: 500;
+  padding: 12px 28px;
+  font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: var(--shadow-md);
-  font-family: inherit;
   font-size: 1em;
+  position: relative;
+  overflow: hidden;
 }
+
 button:hover:not(:disabled), .btn:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+
+button:active:not(:disabled), .btn:active {
+  transform: translateY(0);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.glass {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-md);
 }
 
 .card,
 .auth-container,
 .feature-card {
   background: var(--card-bg);
+  backdrop-filter: blur(12px);
   border-radius: var(--rounded-md);
   box-shadow: var(--shadow-md);
-  transition: transform 0.3s;
-}
-.auth-container:hover,
-.feature-card:hover {
-  transform: translateY(-5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .card {
@@ -130,32 +137,77 @@ button:focus-visible {
   text-align: center;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: var(--text-dark);
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button, .btn {
-    background: linear-gradient(145deg, var(--primary), var(--accent));
-  }
+/* Status colors with gradients */
+.green-status { 
+  background: linear-gradient(to right, #059669, #10B981);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  font-weight: 600;
 }
 
-/* Category status colors */
-.green-status { color: #10B981 !important; }
-.orange-status { color: #F59E0B !important; }
-.blue-status { color: #3B82F6 !important; }
-.purple-status { color: #8B5CF6 !important; }
-.red-status { color: #EF4444 !important; }
-
-/* Add this to the end of the file */
-.history-page {
-  padding: 2rem 0;
+.orange-status { 
+  background: linear-gradient(to right, #D97706, #F59E0B);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  font-weight: 600;
 }
 
-.history-item {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
+.blue-status { 
+  background: linear-gradient(to right, #2563EB, #3B82F6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  font-weight: 600;
+}
+
+.purple-status { 
+  background: linear-gradient(to right, #7C3AED, #8B5CF6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  font-weight: 600;
+}
+
+.red-status { 
+  background: linear-gradient(to right, #DC2626, #EF4444);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  font-weight: 600;
+}
+
+/* Form inputs */
+input, textarea {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-dark);
+  transition: all 0.3s;
+}
+
+input:focus, textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+  outline: none;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Dark mode overrides */
+.dark input, .dark textarea {
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--text-dark);
+}
+
+.dark .glass {
+  background: rgba(30, 41, 59, 0.8);
 }
