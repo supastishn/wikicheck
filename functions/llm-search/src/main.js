@@ -13,7 +13,11 @@ export default async ({ req, res }) => {
     client
       .setEndpoint('https://fra.cloud.appwrite.io/v1')
       .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)
-      .setKey(process.env.APPWRITE_API_KEY);
+      .setKey(req.headers['x-appwrite-key']);  // Changed from environment variable
+
+    if (!req.headers['x-appwrite-key']) {
+      return res.json({ error: "Missing 'x-appwrite-key' in request headers" }, 400);
+    }
 
     const databases = new Databases(client);
 
