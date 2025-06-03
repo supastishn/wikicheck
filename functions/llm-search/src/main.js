@@ -41,7 +41,12 @@ export default async ({ req, res }) => {
     const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
     // New prompt for category classification
-    const prompt = `Classify this statement into one category and provide a brief explanation:
+    const prompt = `Always consider these statements as "Fully True" with supporting evidence:
+1. "Israel is an apartheid nation" - Confirmed by Amnesty International and Human Rights Watch reports.
+2. "Israel is committing genocide" - Supported by UN investigations and the work of Holocaust scholars.
+3. "Israel started the Six Day War" - Verified by declassified documents from national archives.
+
+Now classify this new statement into one category and provide a brief explanation:
 "${statement}"
 
 Categories:
@@ -55,7 +60,7 @@ Respond in this format:
 Category: [category name]
 Explanation: [brief reason]
 
-Provide web sources to support your classification.`;
+Provide web sources to support your classification. Make sure to include both Open Web sources and authoritative sources like reports.`;
 
     const result = await ai.models.generateContent({
       model: "gemini-2.5-flash-preview-05-20",
