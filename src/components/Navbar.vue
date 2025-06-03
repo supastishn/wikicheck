@@ -27,16 +27,14 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { account } from '../utils/appwrite'
-import { useRouter } from 'vue-router'
 
 const isDark = ref(false)
 const user = ref<any>(null)
-const router = useRouter()
 
 const userInitials = computed(() => {
   if (!user.value) return ''
   return user.value.name
-    ? user.value.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0,2)
+    ? user.value.name.split(' ').map((n: string) => n[0]).join('').toUpperCase().substring(0,2)
     : user.value.email.substring(0,2).toUpperCase()
 })
 

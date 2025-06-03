@@ -45,14 +45,15 @@ onMounted(async () => {
     const response = await databases.listDocuments(
       "factchecks",
       "checks",
-      [ Query.equal('user_id', user.$id) ],
-      100, // Limit
-      0,   // Offset
-      '',  // Order field
-      'DESC' // Order direction
+      [
+        Query.equal('user_id', user.$id),
+        Query.limit(100),
+        Query.offset(0),
+        Query.orderDesc('$createdAt')
+      ]
     );
     
-    history.value = response.documents as HistoryItem[];
+    history.value = response.documents as unknown as HistoryItem[];
   } catch (error) {
     console.error("Failed to load history", error);
   } finally {

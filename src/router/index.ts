@@ -33,7 +33,7 @@ const router = createRouter({
 })
 
  // Add route guard for protected routes
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, _, next) => {
   const requiresAuth = to.meta.requiresAuth;
   const authPages = ['/login', '/register'];
 

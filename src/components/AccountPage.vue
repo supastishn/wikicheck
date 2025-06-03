@@ -25,7 +25,7 @@ const user = ref<any>(null);
 const userInitials = computed(() => {
   if (!user.value) return ''
   return user.value.name
-    ? user.value.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0,2)
+    ? user.value.name.split(' ').map((n: string) => n[0]).join('').toUpperCase().substring(0,2)
     : user.value.email.substring(0,2).toUpperCase()
 });
 
