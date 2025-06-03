@@ -1,4 +1,4 @@
-import { GoogleGenAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 import { Client, Databases } from "node-appwrite";
 
 export default async ({ req, res }) => {
