@@ -17,7 +17,11 @@ const checkStatement = async () => {
   try {
     const res = await functions.createExecution(
       'llm-search',
-      JSON.stringify({ statement: statement.value })
+      JSON.stringify({ statement: statement.value }),
+      false,
+      '',
+      'POST',
+      {'Content-Type': 'application/json'}
     )
 
     // Handle error responses first

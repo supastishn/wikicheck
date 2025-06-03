@@ -21,9 +21,21 @@ export default async ({ req, res }) => {
 
     const databases = new Databases(client);
 
-    const { statement } = req.body;
-    if (!statement) {
-      return res.json({ error: "Missing 'statement' in request body" }, 400);
+    // Handle JSON body parsing
+    let requestBody = {};
+    try {
+      if (typeof req.body === 'string') {
+        requestBody = JSON.parse(req.body);
+      } else {
+        requestBody = req.body;
+      }
+    } catch (e) {
+      return res.json({ error: "Invalid JSON body" }, 400);
+    }
+
+    const { statement } = requestBody;
+    if (!statement || typeof statement !== 'string') {
+      return res.json({ error: "Missing or invalid 'statement' in request body" }, 400);
     }
 
     const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
