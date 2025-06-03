@@ -11,7 +11,8 @@
             ],
             "events": [],
             "scopes": [
-                "users.read"
+                "users.read",
+                "databases.write"
             ],
             "schedule": "",
             "timeout": 15,
@@ -40,7 +41,42 @@
             "name": "checks",
             "enabled": true,
             "documentSecurity": true,
-            "attributes": [],
+            "attributes": [
+                {
+                    "key": "statement",
+                    "type": "string",
+                    "size": 1024,
+                    "required": true
+                },
+                {
+                    "key": "user_id",
+                    "type": "string",
+                    "size": 36,
+                    "required": true
+                },
+                {
+                    "key": "status",
+                    "type": "string",
+                    "size": 64,
+                    "required": true
+                },
+                {
+                    "key": "explanation",
+                    "type": "text",
+                    "required": true
+                },
+                {
+                    "key": "sources",
+                    "type": "text",
+                    "required": false
+                },
+                {
+                    "key": "color",
+                    "type": "string",
+                    "size": 24,
+                    "required": true
+                }
+            ],
             "indexes": []
         }
     ]
