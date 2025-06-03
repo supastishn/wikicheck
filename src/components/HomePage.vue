@@ -116,7 +116,7 @@ const checkStatement = async () => {
       </div>
       <div v-if="result.sources" class="sources">
         <h3>Sources</h3>
-        <pre>{{ result.sources }}</pre>
+        <div v-html="result.sources"></div>
       </div>
     </div>
     <div v-else-if="errorResult" class="result error">
@@ -192,5 +192,14 @@ button:disabled {
   min-height: 60px;
   border: 1px solid #eaeaea;
   margin-top: 1rem;
+}
+.sources a {
+  color: var(--primary);
+  text-decoration: none;
+  display: block;
+  margin: 5px 0;
+}
+.sources a:hover {
+  text-decoration: underline;
 }
 </style>

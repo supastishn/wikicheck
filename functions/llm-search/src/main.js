@@ -73,13 +73,20 @@ Provide web sources to support your classification.`;
     // Extract sources from Gemini's groundingMetadata.groundingChunks
     let sources = [];
     if (result.candidates?.[0]?.groundingMetadata?.groundingChunks) {
-      sources = [
-        ...new Set(
-          result.candidates[0].groundingMetadata.groundingChunks
-            .filter(chunk => chunk.web?.uri)
-            .map(chunk => chunk.web.uri)
-        )
-      ];
+      // Deduplicate sources by URI
+      const sourcesMap = new Map();
+      result.candidates[0].groundingMetadata.groundingChunks.forEach(chunk => {
+        if (chunk.web?.uri && chunk.web?.title) {
+          sourcesMap.set(chunk.web.uri, chunk.web.title);
+        }
+      });
+
+      // Generate list of hyperlinks
+      sources = Array.from(sourcesMap).map(([uri, title]) => {
+        const escapedTitle = escapeXml(title);
+        const escapedUri = escapeXml(uri);
+        return `<a href="${escapedUri}" target="_blank" rel="noopener noreferrer">${escapedTitle}</a>`;
+      });
     }
 
     let status = "Unknown";
@@ -129,13 +136,13 @@ Provide web sources to support your classification.`;
       console.error("Failed to save fact check", dbError.message);
     }
 
-    // XML response with new sources array
+    // XML response with new sources array (as HTML hyperlinks)
     return res.send(`
       <factcheck>
         <status>${status}</status>
         <color>${color}</color>
         <explanation>${explanation.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</explanation>
-        <sources>${(Array.isArray(sources) ? sources.join('\n') : sources).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</sources>
+        <sources>${escapeXml(sources.join('<br>'))}</sources>
       </factcheck>
     `.trim(), 200, { 'Content-Type': 'application/xml' });
 
@@ -145,4 +152,15 @@ Provide web sources to support your classification.`;
       details: error.message
     }, 500);
   }
+}
+function escapeXml(unsafe) {
+  return unsafe.replace(/[<>&'"]/g, function(c) {
+    switch(c) {
+      case '<': return '&lt;';
+      case '>': return '&gt;';
+      case '&': return '&amp;';
+      case '"': return '&quot;';
+      case "'": return '&apos;';
+    }
+  });
 }
