@@ -128,7 +128,7 @@ Provide web sources to support your classification.`;
           statement: statement,
           status: status,
           explanation: explanation,
-          sources: Array.isArray(sources) ? sources.join('\n') : sources,
+          sources: sources.join('<br>'),  // Store as HTML string
           color: color
         }
       );

@@ -149,3 +149,13 @@ button:focus-visible {
 .blue-status { color: #3B82F6 !important; }
 .purple-status { color: #8B5CF6 !important; }
 .red-status { color: #EF4444 !important; }
+
+/* Add this to the end of the file */
+.history-page {
+  padding: 2rem 0;
+}
+
+.history-item {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
