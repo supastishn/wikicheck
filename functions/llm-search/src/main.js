@@ -40,20 +40,66 @@ export default async ({ req, res }) => {
 
     const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
+    // New prompt for category classification
+    const prompt = `Classify this statement into one category and provide a brief explanation:
+"${statement}"
+
+Categories:
+1. Fully True (100% true) ✅
+2. Partially True (true but incomplete) ⚠️
+3. Contested (evidence both ways) ↔️
+4. Technically True (true only technically) ⚡
+5. Completely False (100% false) ❌
+
+Respond in this format:
+Category: [category name]
+Explanation: [brief reason]
+
+Provide web sources to support your classification.`;
+
     const result = await ai.models.generateContent({
       model: "gemini-2.5-flash-preview-05-20",
-      contents: [{parts: [{text: statement}]}],
+      contents: [{parts: [{text: prompt}]}],
       config: {
         tools: [{googleSearch: {}}],
       },
     });
 
-    // Compose XML response
-    const candidate = result.candidates?.[0] || {};
-    const status = candidate.safetyRatings?.[0]?.category === "SAFE" ? "Verified Fact" : "False Information";
-    const color = candidate.safetyRatings?.[0]?.category === "SAFE" ? "green" : "red";
-    const explanation = result.text || "";
-    const sources = candidate.groundingMetadata?.searchEntryPoint?.renderedContent || "";
+    // Parse Gemini response for category, explanation, and sources
+    const responseText = result.text || "";
+    const categoryMatch = responseText.match(/Category:\s*(.+)/i);
+    const explanationMatch = responseText.match(/Explanation:\s*([\s\S]*?)(?:\n|$)/i);
+    // Try to extract sources after "Sources:" or "Web sources:" or at the end
+    let sources = "";
+    const sourcesMatch = responseText.match(/Sources?:\s*([\s\S]*)/i) || responseText.match(/Web sources?:\s*([\s\S]*)/i);
+    if (sourcesMatch) {
+      sources = sourcesMatch[1].trim();
+    }
+
+    let status = "Unknown";
+    let color = "gray";
+    let explanation = explanationMatch ? explanationMatch[1].trim() : "";
+
+    if (categoryMatch) {
+      const categoryText = categoryMatch[1].toLowerCase();
+
+      if (categoryText.includes("fully true")) {
+        status = "Fully True ✅";
+        color = "green";
+      } else if (categoryText.includes("partially true")) {
+        status = "Partially True ⚠️";
+        color = "orange";
+      } else if (categoryText.includes("contested")) {
+        status = "Contested ↔️";
+        color = "blue";
+      } else if (categoryText.includes("technically true")) {
+        status = "Technically True ⚡";
+        color = "purple";
+      } else if (categoryText.includes("completely false")) {
+        status = "Completely False ❌";
+        color = "red";
+      }
+    }
 
     const xml = `
       <factcheck>

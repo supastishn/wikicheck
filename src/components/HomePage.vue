@@ -99,7 +99,16 @@ const checkStatement = async () => {
     </div>
 
     <div v-if="result" class="result">
-      <div class="status" :style="{ color: result.color }">
+      <div 
+        class="status" 
+        :class="{
+          'green-status': result.color === 'green',
+          'orange-status': result.color === 'orange',
+          'blue-status': result.color === 'blue',
+          'purple-status': result.color === 'purple',
+          'red-status': result.color === 'red'
+        }"
+      >
         {{ result.status }}
       </div>
       <div class="explanation">
