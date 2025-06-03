@@ -43,4 +43,4 @@ Sample `200` Response:
 
 ## 🔒 Environment Variables
 
-No environment variables required.
+Environment variables should be declared in Appwrite Cloud Console.
