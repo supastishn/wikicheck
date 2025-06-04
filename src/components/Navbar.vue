@@ -1,7 +1,11 @@
 <template>
-  <nav class="sidebar glass">
+  <!-- Mobile backdrop and hamburger toggle -->
+  <div v-if="isMobile && mobileOpen" class="backdrop" @click="mobileOpen = false"></div>
+  <button class="mobile-toggle" @click="toggleMobile" v-show="isMobile">☰</button>
+
+  <nav class="sidebar glass" :class="{ 'mobile-open': mobileOpen }">
     <div class="top-section">
-      <router-link to="/" class="navbar-title">Wikicheck</router-link>
+      <router-link to="/" class="navbar-title" @click="mobileOpen = false">Wikicheck</router-link>
       
       <button class="mode-toggle" @click="toggleMode">
         {{ isDark ? '🌙' : '☀️' }}
@@ -9,7 +13,7 @@
     </div>
     
     <div class="user-section" v-if="user">
-      <router-link to="/account">
+      <router-link to="/account" @click="mobileOpen = false">
         <div class="profile-circle">
           {{ userInitials }}
         </div>
@@ -18,18 +22,18 @@
     </div>
     
     <div class="nav-links">
-      <router-link to="/fact-check">
+      <router-link to="/fact-check" @click="mobileOpen = false">
         <i>🔍</i> Fact Check
       </router-link>
-      <router-link to="/history">
+      <router-link to="/history" @click="mobileOpen = false">
         <i>📋</i> History
       </router-link>
       
       <div v-if="!user" class="auth-links">
-        <router-link to="/login">
+        <router-link to="/login" @click="mobileOpen = false">
           <i>🔑</i> Login
         </router-link>
-        <router-link to="/register">
+        <router-link to="/register" @click="mobileOpen = false">
           <i>📝</i> Register
         </router-link>
       </div>
@@ -43,6 +47,20 @@ import { account } from '../utils/appwrite'
 
 const isDark = ref(false)
 const user = ref<any>(null)
+
+const mobileOpen = ref(false);
+const isMobile = ref(false);
+
+function checkIsMobile() {
+  isMobile.value = window.innerWidth <= 768;
+  if (!isMobile.value) {
+    mobileOpen.value = false;
+  }
+}
+
+function toggleMobile() {
+  mobileOpen.value = !mobileOpen.value;
+}
 
 const userInitials = computed(() => {
   if (!user.value) return ''
@@ -66,6 +84,9 @@ function toggleMode() {
 }
 
 onMounted(async () => {
+  checkIsMobile();
+  window.addEventListener('resize', checkIsMobile);
+
   const saved = localStorage.getItem('wikicheck-theme')
   if (saved === 'dark') setMode(true)
   else setMode(false)
@@ -214,5 +235,56 @@ onMounted(async () => {
   font-size: 1.2rem;
   width: 1.5rem;
   text-align: center;
+}
+</style>
+<style scoped>
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100% !important;
+    left: 0;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .sidebar:hover {
+    width: 100% !important;
+  }
+
+  .user-name,
+  .sidebar:hover .user-name {
+    opacity: 1;
+    max-width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .mobile-toggle {
+    display: block;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1010;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px;
+    font-size: 1.5rem;
+  }
+  
+  .backdrop {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 990;
+  }
 }
 </style>
