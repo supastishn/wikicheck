@@ -163,10 +163,7 @@ button:disabled {
 }
 
 .purple-status { 
-  background: linear-gradient(to right, #7C3AED, #8B5CF6);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent !important;
+  color: var(--text-dark) !important;
   font-weight: 600;
 }
 
