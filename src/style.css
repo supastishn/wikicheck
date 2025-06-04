@@ -4,7 +4,7 @@
   --secondary: #8b5cf6;
   --accent: #06b6d4;
   --background: #f8fafc;
-  --card-bg: rgba(255, 255, 255, 0.8);
+  --card-bg: rgba(255, 255, 255, 0.7);
   --text-dark: #1e293b;
   --text-light: #64748b;
   --success: #22c55e;
@@ -41,7 +41,7 @@
 
 :root.dark, html.dark {
   --background: #0f172a;
-  --card-bg: rgba(30, 41, 59, 0.8);
+  --card-bg: rgba(30, 41, 59, 0.7);
   --text-dark: #f1f5f9;
   --text-light: #cbd5e1;
   color-scheme: dark;
@@ -65,12 +65,12 @@ body {
 }
 
 .navbar {
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(10px); /* Enhanced glass effect to match particles */
 }
 
 .auth-container, .glass {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(10px);
 }
 
