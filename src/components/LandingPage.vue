@@ -37,12 +37,16 @@
 }
 
 .hero {
-  background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+  background: linear-gradient(135deg, #f0f4ff 0%, #d9e0ff 100%);
   border-radius: var(--rounded-md);
-  color: white;
   padding: 5rem 2rem;
   margin-bottom: 4rem;
   text-align: center;
+}
+
+/* For dark mode */
+.dark .hero {
+  background: linear-gradient(135deg, #1a1a5e 0%, #0d0d2b 100%);
 }
 
 .hero h1 {
@@ -91,8 +95,8 @@
 
 .cta-btn.secondary {
   background: transparent;
-  border: 2px solid white;
-  color: white;
+  border: 2px solid var(--text-dark);
+  color: var(--text-dark);
 }
 
 .cta-btn.secondary:hover {
