@@ -1,27 +1,40 @@
 <template>
-  <div class="padding">
-    <nav class="navbar">
+  <nav class="sidebar glass">
+    <div class="top-section">
       <router-link to="/" class="navbar-title">Wikicheck</router-link>
-      <div class="navbar-links">
-        <router-link to="/fact-check">Fact Check</router-link>
-        <router-link to="/history">History</router-link>
-      </div>
-      <div v-if="user" class="user-info">
-        <router-link to="/account">
-          <div class="profile-circle">
-            {{ userInitials }}
-          </div>
+      
+      <button class="mode-toggle" @click="toggleMode">
+        {{ isDark ? '🌙' : '☀️' }}
+      </button>
+    </div>
+    
+    <div class="user-section" v-if="user">
+      <router-link to="/account">
+        <div class="profile-circle">
+          {{ userInitials }}
+        </div>
+      </router-link>
+      <div class="user-name">{{ user.name || user.email }}</div>
+    </div>
+    
+    <div class="nav-links">
+      <router-link to="/fact-check">
+        <i>🔍</i> Fact Check
+      </router-link>
+      <router-link to="/history">
+        <i>📋</i> History
+      </router-link>
+      
+      <div v-if="!user" class="auth-links">
+        <router-link to="/login">
+          <i>🔑</i> Login
+        </router-link>
+        <router-link to="/register">
+          <i>📝</i> Register
         </router-link>
       </div>
-      <div v-else class="auth-buttons">
-        <router-link to="/login" class="auth-btn">Login</router-link>
-        <router-link to="/register" class="auth-btn primary">Register</router-link>
-      </div>
-      <button class="mode-toggle" @click="toggleMode">
-        {{ isDark ? '🌙 Dark' : '☀️ Light' }}
-      </button>
-    </nav>
-  </div>
+    </div>
+  </nav>
 </template>
 
 <script setup lang="ts">
@@ -65,79 +78,90 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.padding {
+.sidebar {
   position: fixed;
-  top: 1.2rem;
+  top: 0;
   left: 0;
-  width: 100vw;
-  z-index: 100;
-  padding-left: 2vw;
-  padding-right: 2vw;
-  box-sizing: border-box;
-}
-
-.navbar {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.1);
+  height: 100vh;
+  width: 5rem;
+  padding: 1.5rem 1rem;
+  background: var(--card-bg);
   backdrop-filter: blur(10px);
-  box-shadow: var(--shadow-sm);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  color: var(--text-dark);
-  padding: 1rem 2rem;
-  margin-bottom: 0;
-  box-sizing: border-box;
-  border-radius: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: var(--shadow-md);
+  border-right: 1px solid rgba(255, 255, 255, 0.18);
+  z-index: 500;
+  transition: width 0.3s ease;
+  overflow: hidden;
 }
 
-.mode-toggle {
-  margin-left: 2rem;
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--text-dark);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 6px;
-  padding: 0.4em 1em;
-  font-size: 1em;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+.sidebar:hover {
+  width: 18rem;
 }
-.mode-toggle:hover {
-  background: #fff;
-  color: #646cff;
+
+.top-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  width: 100%;
 }
 
 .navbar-title {
-  font-size: 1.5rem;
+  text-align: center;
+  font-size: 1.2rem;
   font-weight: bold;
-  letter-spacing: 1px;
+}
+
+.mode-toggle {
+  /* Updated */
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
   color: var(--text-dark);
-  text-decoration: none;
+  border-radius: 4px;
+  padding: 0.4rem 0;
+  cursor: pointer;
+  width: 80%;
 }
 
-.navbar-links a {
-  color: var(--text-dark);
-  text-decoration: none;
-  margin-left: 1.5rem;
-  font-weight: 500;
-  transition: color 0.2s;
-}
-
-.navbar-links a:hover {
-  color: #ffd700;
-}
-
-.user-info {
+.user-section {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  color: var(--text-dark);
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+.user-name {
+  /* New - show user name only on hover */
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  opacity: 0;
+  max-width: 0;
+  transition: opacity 0.3s, max-width 0.3s;
+}
+
+.sidebar:hover .user-name {
+  opacity: 1;
+  max-width: 100%;
+  margin-top: 0.5rem;
+}
+
+.user-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  opacity: 1;
 }
 
 .profile-circle {
-  width: 40px;
-  height: 40px;
+  width: 3rem;
+  height: 3rem;
   border-radius: 50%;
   background-color: #fff;
   color: #646cff;
@@ -148,26 +172,47 @@ onMounted(async () => {
   cursor: pointer;
   transition: transform 0.3s;
 }
-.profile-circle:hover {
-  transform: scale(1.1);
-}
 
-.auth-buttons {
+.nav-links {
   display: flex;
-  gap: 0.5rem;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
 }
 
-.auth-btn {
-  padding: 0.4rem 0.8rem;
-  background: transparent;
+.nav-links a,
+.auth-links a {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  border-radius: var(--rounded-sm);
   color: var(--text-dark);
-  border: 1px solid white;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  text-decoration: none;
+  transition: background 0.2s;
 }
 
-.auth-btn.primary {
-  background: rgba(255,255,255,0.2);
+.nav-links a:not(.router-link-exact-active):hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-links a.router-link-exact-active {
+  background: linear-gradient(to right, var(--primary), var(--secondary));
+  color: white;
+}
+
+.auth-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.nav-links a i {
+  /* New - add icons */
+  margin-right: 1rem;
+  font-size: 1.2rem;
+  width: 1.5rem;
+  text-align: center;
 }
 </style>
