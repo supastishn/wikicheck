@@ -13,7 +13,7 @@ onMounted(() => {
   camera.position.z = 5;
 
   // Create particles
-  const particleCount = 50;
+  const particleCount = 500;  // Changed from 50
   const positions = new Float32Array(particleCount * 3);
   const sizes = new Float32Array(particleCount);
   
@@ -22,7 +22,7 @@ onMounted(() => {
     positions[i3] = (Math.random() - 0.5) * 10;
     positions[i3 + 1] = (Math.random() - 0.5) * 10;
     positions[i3 + 2] = (Math.random() - 0.5) * 10;
-    sizes[i] = Math.random() * 0.2 - 0.1;
+    sizes[i] = (Math.random() * 0.4 - 0.2);  // Original: 0.2 - 0.1
   }
 
   const geometry = new THREE.BufferGeometry();
@@ -42,11 +42,11 @@ onMounted(() => {
       void main() {
         vPosition = position;
         vec3 newPosition = position;
-        newPosition.x += sin(time * 0.3 + position.z) * 0.35;
-        newPosition.y += cos(time * 0.2 + position.x) * 0.35;
-        newPosition.z += cos(time * 0.4 + position.y) * 0.35;
+        newPosition.x += sin(time * 0.4 + position.z) * 0.5;
+        newPosition.y += cos(time * 0.3 + position.x) * 0.5;
+        newPosition.z += cos(time * 0.5 + position.y) * 0.5;
         gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
-        gl_PointSize = size * 200.0;
+        gl_PointSize = size * 400.0;
       }
     `,
     fragmentShader: `
