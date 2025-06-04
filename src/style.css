@@ -21,6 +21,10 @@
   --rounded-md: 20px;
   --rounded-full: 9999px;
 
+  /* Subtle grid background patterns */
+  --grid-light-pattern: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M80 80H0V0h80v80ZM1 1h78v78H1V1Zm1 1h76v76H2V2Z' fill='none' stroke='rgba(0,0,0,0.05)' stroke-width='1'/%3E%3C/svg%3E");
+  --grid-dark-pattern: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M80 80H0V0h80v80ZM1 1h78v78H1V1Zm1 1h76v76H2V2Z' fill='none' stroke='rgba(255,255,255,0.05)' stroke-width='1'/%3E%3C/svg%3E");
+
   font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -51,11 +55,15 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-image: var(--grid-light-pattern);
+  background-attachment: fixed;
 }
 
 html.dark body {
   color: var(--text-dark);
   background: linear-gradient(135deg, #1e1b4b 0%, #3b0764 100%);
+  background-image: var(--grid-dark-pattern);
+  background-attachment: fixed;
 }
 
 a {
