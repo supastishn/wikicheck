@@ -52,6 +52,7 @@
 .hero h1 {
   font-size: 2.8rem;
   margin-bottom: 1rem;
+  color: var(--text-dark);
 }
 
 .highlight {
@@ -63,7 +64,7 @@
 
 .hero p {
   font-size: 1.2rem;
-  color: #e0e0e0;
+  color: var(--text-light);
   margin-bottom: 2rem;
 }
 
