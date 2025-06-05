@@ -118,6 +118,21 @@ onMounted(async () => {
   overflow: hidden;
 }
 
+/* Hide text content when sidebar is not hovered (desktop) */
+.sidebar:not(:hover) {
+  width: 5rem;
+}
+
+.sidebar:not(:hover) .top-section .navbar-title,
+.sidebar:not(:hover) .user-section .user-name,
+.sidebar:not(:hover) .nav-links a span {
+  display: none;
+}
+
+.sidebar:not(:hover) .auth-links a span {
+  display: none;
+}
+
 .sidebar:hover {
   width: 18rem;
 }
@@ -249,6 +264,17 @@ onMounted(async () => {
 
   .sidebar.mobile-open {
     transform: translateX(0);
+  }
+
+  /* Hide sidebar completely when not open on mobile */
+  .sidebar:not(.mobile-open) {
+    visibility: hidden;
+    pointer-events: none;
+  }
+  
+  .sidebar.mobile-open {
+    visibility: visible;
+    pointer-events: all;
   }
 
   .sidebar:hover {
