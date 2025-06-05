@@ -172,18 +172,20 @@ onMounted(async () => {
 }
 
 .user-name {
-  /* New - show user name only on hover */
   font-size: 0.85rem;
   white-space: nowrap;
   overflow: hidden;
-  opacity: 0;
-  max-width: 0;
-  transition: opacity 0.3s, max-width 0.3s;
+  /* Removed: opacity, max-width, transition properties */
 }
 
-.sidebar:hover .user-name {
-  opacity: 1;
-  max-width: 100%;
+/* Add display: none for collapsed state */
+.sidebar:not(:hover) .user-section .user-name {
+  display: none;
+}
+
+/* Show with proper spacing on hover */
+.sidebar:hover .user-section .user-name {
+  display: block;
   margin-top: 0.5rem;
 }
 
@@ -281,10 +283,13 @@ onMounted(async () => {
     width: 100% !important;
   }
 
-  .user-name,
-  .sidebar:hover .user-name {
-    opacity: 1;
-    max-width: 100%;
+  /* Mobile-specific styles for user-name */
+  .sidebar .user-name {
+    display: none;
+  }
+
+  .sidebar.mobile-open .user-name {
+    display: block;
     margin-top: 0.5rem;
   }
 
