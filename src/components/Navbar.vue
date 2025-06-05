@@ -3,7 +3,11 @@
   <div v-if="isMobile && mobileOpen" class="backdrop" @click="mobileOpen = false"></div>
   <button class="mobile-toggle" @click="toggleMobile" v-show="isMobile">☰</button>
 
-  <nav class="sidebar glass" :class="{ 'mobile-open': mobileOpen }">
+  <nav class="sidebar glass" :class="{ 
+    'mobile-open': mobileOpen,
+    'mobile-collapsed': mobileCollapsed,
+    'mobile-expanded': mobileExpanded 
+  }">
     <div class="top-section">
       <router-link to="/" class="navbar-title" @click="mobileOpen = false">Wikicheck</router-link>
       
@@ -38,6 +42,10 @@
         </router-link>
       </div>
     </div>
+    <!-- Add collapser button at bottom of nav -->
+    <div class="nav-collapser" v-if="isMobile" @click="toggleMobileExpand">
+      <i>{{ mobileExpanded ? '⊖' : '⊕' }}</i>
+    </div>
   </nav>
 </template>
 
@@ -51,15 +59,35 @@ const user = ref<any>(null)
 const mobileOpen = ref(false);
 const isMobile = ref(false);
 
+// Add mobileExpanded state
+const mobileExpanded = ref(false);
+const mobileCollapsed = ref(false);
+
+// Add toggle function for mobile expansion
+const toggleMobileExpand = () => {
+  mobileExpanded.value = !mobileExpanded.value;
+  mobileCollapsed.value = !mobileCollapsed.value;
+};
+
 function checkIsMobile() {
   isMobile.value = window.innerWidth <= 768;
   if (!isMobile.value) {
     mobileOpen.value = false;
+    mobileExpanded.value = false;
+    mobileCollapsed.value = false;
   }
 }
 
 function toggleMobile() {
   mobileOpen.value = !mobileOpen.value;
+  // Reset collapse/expand state when opening/closing
+  if (!mobileOpen.value) {
+    mobileExpanded.value = false;
+    mobileCollapsed.value = false;
+  } else {
+    mobileExpanded.value = false;
+    mobileCollapsed.value = true;
+  }
 }
 
 const userInitials = computed(() => {
@@ -271,7 +299,8 @@ onMounted(async () => {
 <style scoped>
 @media (max-width: 768px) {
   .sidebar {
-    width: 100% !important;
+    width: 5rem !important;
+    height: 100%;
     left: 0;
     transform: translateX(-100%);
     transition: transform 0.3s ease;
@@ -280,6 +309,18 @@ onMounted(async () => {
 
   .sidebar.mobile-open {
     transform: translateX(0);
+  }
+
+  .sidebar.mobile-open.mobile-collapsed {
+    height: 80px;
+    width: 5rem !important;
+    overflow: hidden;
+    bottom: 0;
+  }
+
+  .mobile-open.mobile-expanded {
+    height: 100vh;
+    width: 250px !important;
   }
 
   /* Hide sidebar completely when not open on mobile */
@@ -293,11 +334,28 @@ onMounted(async () => {
     pointer-events: all;
   }
 
-  .sidebar:hover {
-    width: 100% !important;
+  .mobile-expand-button {
+    display: none;
   }
 
-  /* Mobile-specific styles for user-name */
+  .nav-collapser {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    cursor: pointer;
+    font-size: 1.5rem;
+    transition: all 0.3s;
+  }
+
+  .mobile-collapsed .nav-collapser i {
+    transform: rotate(180deg);
+  }
+
   .sidebar .user-name {
     display: none;
   }
