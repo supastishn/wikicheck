@@ -224,6 +224,25 @@ onMounted(async () => {
   transition: background 0.2s;
 }
 
+/* Center icons perfectly when sidebar is collapsed on PC */
+.sidebar:not(:hover):not(.mobile-open) .nav-links a,
+.sidebar:not(:hover):not(.mobile-open) .auth-links a {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Ensure vertical centering too */
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.sidebar:not(:hover):not(.mobile-open) .nav-links a i,
+.sidebar:not(:hover):not(.mobile-open) .auth-links a i {
+  margin-right: 0;
+  margin-left: 0;
+  position: relative; /* Add relative positioning */
+  left: auto; /* Reset any potential shifts */
+  transform: none; /* Ensure no transforms interfere */
+}
+
 .nav-links a:not(.router-link-exact-active):hover {
   background: rgba(255, 255, 255, 0.1);
 }
