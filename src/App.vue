@@ -22,7 +22,11 @@ import ParticleBackground from './components/ParticleBackground.vue';
 .main-content {
   flex: 1;
   padding: 2rem; /* Adjusted padding */
-  max-width: calc(100% - 5rem); /* Account for sidebar width */
-  margin-left: 5rem; /* Space for sidebar */
+  max-width: calc(100% - 6rem); /* Account for sidebar expanded width */
+  margin-left: 6rem; /* More space for collapsed sidebar */
+}
+
+html:not(.mobile-open) .main-content {
+  transition: margin-left 0.3s ease;
 }
 </style>

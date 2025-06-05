@@ -175,18 +175,9 @@ onMounted(async () => {
   font-size: 0.85rem;
   white-space: nowrap;
   overflow: hidden;
-  /* Removed: opacity, max-width, transition properties */
-}
-
-/* Add display: none for collapsed state */
-.sidebar:not(:hover) .user-section .user-name {
-  display: none;
-}
-
-/* Show with proper spacing on hover */
-.sidebar:hover .user-section .user-name {
-  display: block;
-  margin-top: 0.5rem;
+  text-overflow: ellipsis;
+  max-width: 0;
+  transition: max-width 0.3s ease;
 }
 
 .user-section {
@@ -209,6 +200,10 @@ onMounted(async () => {
   font-weight: bold;
   cursor: pointer;
   transition: transform 0.3s;
+}
+.sidebar:not(:hover) .profile-circle {
+  min-width: 2rem;
+  min-height: 2rem;
 }
 
 .nav-links {
