@@ -23,18 +23,18 @@
     
     <div class="nav-links">
       <router-link to="/fact-check" @click="mobileOpen = false">
-        <i>🔍</i> Fact Check
+        <i>🔍</i> <span>Fact Check</span>
       </router-link>
       <router-link to="/history" @click="mobileOpen = false">
-        <i>📋</i> History
+        <i>📋</i> <span>History</span>
       </router-link>
       
       <div v-if="!user" class="auth-links">
         <router-link to="/login" @click="mobileOpen = false">
-          <i>🔑</i> Login
+          <i>🔑</i> <span>Login</span>
         </router-link>
         <router-link to="/register" @click="mobileOpen = false">
-          <i>📝</i> Register
+          <i>📝</i> <span>Register</span>
         </router-link>
       </div>
     </div>
@@ -123,13 +123,13 @@ onMounted(async () => {
   width: 5rem;
 }
 
-.sidebar:not(:hover) .top-section .navbar-title,
-.sidebar:not(:hover) .user-section .user-name,
-.sidebar:not(:hover) .nav-links a span {
+.sidebar:not(:hover):not(.mobile-open) .nav-links a > span,
+.sidebar:not(:hover):not(.mobile-open) .auth-links a > span {
   display: none;
 }
 
-.sidebar:not(:hover) .auth-links a span {
+.sidebar:not(:hover) .top-section .navbar-title,
+.sidebar:not(:hover) .user-section .user-name {
   display: none;
 }
 
