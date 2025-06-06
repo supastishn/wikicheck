@@ -156,9 +156,16 @@ onMounted(async () => {
   display: none;
 }
 
-.sidebar:not(:hover) .top-section .navbar-title,
 .sidebar:not(:hover) .user-section .user-name {
   display: none;
+}
+
+.sidebar:not(:hover) .navbar-title {
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .sidebar:hover {
