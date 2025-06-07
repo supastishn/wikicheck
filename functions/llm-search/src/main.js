@@ -112,38 +112,61 @@ Provide web sources to support your classification. Make sure to include both Op
 
         // Add citation markers to explanation text
         if (explanation) {
-            let currentPos = 0;
-            let citedExplanation = "";
-            let explanationText = explanation; // Use the variable we defined
-
-            // Process each citation point
-            if (result.candidates[0].groundingMetadata.groundingSupports) {
-                // Sort supports by startIndex
+            // Refined citation insertion logic
+            if (explanation) {
                 const supportsSorted = result.candidates[0].groundingMetadata.groundingSupports
                     .slice()
-                    .sort((a, b) => a.segment.startIndex - b.segment.startIndex);
-
+                    .sort((a, b) => a.segment.text.localeCompare(b.segment.text) || b.segment.text.length - a.segment.text.length);
+                
+                // Create a map from segment text to citations
+                const segmentCiteMap = new Map();
                 supportsSorted.forEach(support => {
-                    // Add text before citation
-                    citedExplanation += explanationText.substring(currentPos, support.segment.startIndex);
-                    currentPos = support.segment.startIndex;
-
-                    // Get the indices that match our sourcesList
+                    // Get citations for this segment
                     const citations = support.groundingChunkIndices
                         .filter(idx => citedIndices.has(idx))
                         .map(idx => sourcesList.findIndex(src => src.uri === result.candidates[0].groundingMetadata.groundingChunks[idx].web.uri) + 1)
                         .filter(n => n > 0)
                         .sort((a, b) => a - b);
-
+                    
                     if (citations.length > 0) {
-                        citedExplanation += `[${citations.join(',')}]`;
+                        // Group identical segments
+                        const segmentText = support.segment.text;
+                        const existing = segmentCiteMap.get(segmentText) || [];
+                        segmentCiteMap.set(segmentText, [...new Set([...existing, ...citations])].sort((a, b) => a - b));
                     }
                 });
-            }
 
-            // Add remaining explanation text
-            citedExplanation += explanationText.substring(currentPos);
-            explanation = citedExplanation;
+                let citedExplanation = explanation;
+                // Process longest segments first to avoid partial matches
+                const sortedSegments = [...segmentCiteMap.keys()].sort((a, b) => b.length - a.length);
+                
+                for (const segmentText of sortedSegments) {
+                    const citations = segmentCiteMap.get(segmentText);
+                    const citationStr = `[${citations.join(',')}]`;
+                    
+                    // Replace each occurrence with text + citation
+                    let startIndex = 0;
+                    let index;
+                    while ((index = citedExplanation.indexOf(segmentText, startIndex)) !== -1) {
+                        // Only replace if at word boundaries
+                        const prevChar = citedExplanation[index-1] || ' ';
+                        const nextChar = citedExplanation[index + segmentText.length] || ' ';
+                        
+                        if (!/\w/.test(prevChar) && !/\w/.test(nextChar)) {
+                            citedExplanation = citedExplanation.substring(0, index) +
+                                segmentText + citationStr +
+                                citedExplanation.substring(index + segmentText.length);
+                            
+                            // Advance to position after replacement
+                            startIndex = index + segmentText.length + citationStr.length;
+                        } else {
+                            // Skip incomplete matches
+                            startIndex = index + 1;
+                        }
+                    }
+                }
+                explanation = citedExplanation;
+            }
         }
     }
 
