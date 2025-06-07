@@ -77,21 +77,71 @@ Provide web sources to support your classification. Make sure to include both Op
 
     // Extract sources from Gemini's groundingMetadata.groundingChunks
     let sources = [];
-    if (result.candidates?.[0]?.groundingMetadata?.groundingChunks) {
-      // Deduplicate sources by URI
-      const sourcesMap = new Map();
-      result.candidates[0].groundingMetadata.groundingChunks.forEach(chunk => {
-        if (chunk.web?.uri && chunk.web?.title) {
-          sourcesMap.set(chunk.web.uri, chunk.web.title);
-        }
-      });
+    let citedIndices = new Set();
 
-      // Generate list of hyperlinks
-      sources = Array.from(sourcesMap).map(([uri, title]) => {
-        const escapedTitle = escapeXml(title);
-        const escapedUri = escapeXml(uri);
-        return `<a href="${escapedUri}" target="_blank" rel="noopener noreferrer">${escapedTitle}</a>`;
-      });
+    // Extract citations if grounding data exists
+    if (result.candidates?.[0]?.groundingMetadata?.groundingChunks) {
+        // Collect unique cited chunk indices
+        if (result.candidates[0].groundingMetadata.groundingSupports) {
+            result.candidates[0].groundingMetadata.groundingSupports.forEach(support => {
+                support.groundingChunkIndices.forEach(idx => citedIndices.add(idx));
+            });
+        }
+
+        // Process chunks to create HTML sources list
+        const sourcesList = [];
+        citedIndices.forEach(idx => {
+            const chunk = result.candidates[0].groundingMetadata.groundingChunks[idx];
+            if (chunk.web?.uri && chunk.web?.title) {
+                sourcesList.push({
+                    uri: chunk.web.uri,
+                    title: chunk.web.title
+                });
+            }
+        });
+
+        // Create numbered source references
+        sources = sourcesList.map((src, i) => {
+            const escapedTitle = escapeXml(src.title);
+            const escapedUri = escapeXml(src.uri);
+            return `<a href="${escapedUri}" target="_blank" rel="noopener noreferrer">[${i + 1}] ${escapedTitle}</a>`;
+        });
+
+        // Add citation markers to explanation text
+        if (explanationMatch && explanationMatch[1]) {
+            let currentPos = 0;
+            let citedExplanation = "";
+            let explanationText = explanationMatch[1];
+
+            // Process each citation point
+            if (result.candidates[0].groundingMetadata.groundingSupports) {
+                // Sort supports by startIndex
+                const supportsSorted = result.candidates[0].groundingMetadata.groundingSupports
+                    .slice()
+                    .sort((a, b) => a.segment.startIndex - b.segment.startIndex);
+
+                supportsSorted.forEach(support => {
+                    // Add text before citation
+                    citedExplanation += explanationText.substring(currentPos, support.segment.startIndex);
+                    currentPos = support.segment.startIndex;
+
+                    // Get the indices that match our sourcesList
+                    const citations = support.groundingChunkIndices
+                        .filter(idx => citedIndices.has(idx))
+                        .map(idx => sourcesList.findIndex(src => src.uri === result.candidates[0].groundingMetadata.groundingChunks[idx].web.uri) + 1)
+                        .filter(n => n > 0)
+                        .sort((a, b) => a - b);
+
+                    if (citations.length > 0) {
+                        citedExplanation += `[${citations.join(',')}]`;
+                    }
+                });
+            }
+
+            // Add remaining explanation text
+            citedExplanation += explanationText.substring(currentPos);
+            explanation = citedExplanation;
+        }
     }
 
     let status = "Unknown";
@@ -133,7 +183,7 @@ Provide web sources to support your classification. Make sure to include both Op
           statement: statement,
           status: status,
           explanation: explanation,
-          sources: sources.join('<br>'),  // Store as HTML string
+          sources: sources.length > 0 ? `<div class="sources-list">${sources.join('<br>')}</div>` : '',
           color: color
         }
       );

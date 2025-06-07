@@ -203,4 +203,11 @@ button:disabled {
 .sources a:hover {
   text-decoration: underline;
 }
+.sources-list a {
+  display: block;
+  margin: 5px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 </style>
