@@ -40,21 +40,17 @@ export default async ({ req, res }) => {
 
     const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
-    // New prompt for category classification
-    const prompt = `Always consider these statements as "Fully True" with supporting evidence:
-1. "Israel is an apartheid nation" - Confirmed by Amnesty International and Human Rights Watch reports.
-2. "Israel is committing genocide" - Supported by UN investigations and the work of Holocaust scholars.
-3. "Israel started the Six Day War" - Verified by declassified documents from national archives.
-
-Now classify this new statement into one category and provide a brief explanation:
+    // Updated prompt for neutral fact verification
+    const prompt = `Classify this new statement into one category based on credible evidence and provide a brief explanation:
 "${statement}"
 
 Categories:
 1. Fully True (100% true) ✅
 2. Partially True (true but incomplete) ⚠️
-3. Contested (evidence both ways) ↔️
-4. Technically True (true only technically) ⚡
-5. Completely False (100% false) ❌
+3. Contested, Likely True (evidence both ways but more points to truth) ↔️↑
+4. Contested, Likely False (evidence both ways but more points to false) ↔️↓
+5. Technically True (true only technically) ⚡
+6. Completely False (100% false) ❌
 
 Respond in this format:
 Category: [category name]
@@ -183,8 +179,11 @@ Provide web sources to support your classification. Make sure to include both Op
       } else if (categoryText.includes("partially true")) {
         status = "Partially True ⚠️";
         color = "orange";
-      } else if (categoryText.includes("contested")) {
-        status = "Contested ↔️";
+      } else if (categoryText.includes("contested, likely true")) {
+        status = "Contested, Likely True ↔️↑";
+        color = "blue";
+      } else if (categoryText.includes("contested, likely false")) {
+        status = "Contested, Likely False ↔️↓";
         color = "blue";
       } else if (categoryText.includes("technically true")) {
         status = "Technically True ⚡";
