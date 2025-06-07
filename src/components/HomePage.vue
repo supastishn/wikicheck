@@ -187,12 +187,13 @@ button:disabled {
 .result {
   padding: 1.5rem;
   border-radius: var(--rounded-sm);
-  background-color: #f8f8f8;
+  background: var(--card-bg);
   font-size: 1.2rem;
   font-weight: 500;
   min-height: 60px;
-  border: 1px solid #eaeaea;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   margin-top: 1rem;
+  color: var(--text-dark);
 }
 
 /* Add to the style section */
