@@ -194,6 +194,31 @@ button:disabled {
   border: 1px solid #eaeaea;
   margin-top: 1rem;
 }
+
+/* Add to the style section */
+.explanation {
+  /* Add text to wrap properly around brackets */
+  white-space: pre-line; 
+}
+
+/* Make citation brackets less intrusive */
+.explanation [class*="citation"] {
+  font-size: 0.75em;
+  vertical-align: super;
+  margin: 0 0.15em;
+}
+
+/* Optional: styling for sources */
+.sources-list {
+  margin-top: 15px;
+}
+.sources-list a {
+  display: block;
+  margin: 8px 0;
+  padding-left: 5px;
+  border-left: 2px solid var(--primary);
+}
+
 .sources a {
   color: var(--primary);
   text-decoration: none;

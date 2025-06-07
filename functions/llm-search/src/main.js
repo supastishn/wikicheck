@@ -122,11 +122,12 @@ Provide web sources to support your classification. Make sure to include both Op
                 const segmentCiteMap = new Map();
                 supportsSorted.forEach(support => {
                     // Get citations for this segment
-                    const citations = support.groundingChunkIndices
-                        .filter(idx => citedIndices.has(idx))
-                        .map(idx => sourcesList.findIndex(src => src.uri === result.candidates[0].groundingMetadata.groundingChunks[idx].web.uri) + 1)
-                        .filter(n => n > 0)
-                        .sort((a, b) => a - b);
+                    const citations = [...new Set(
+                        support.groundingChunkIndices
+                            .filter(idx => citedIndices.has(idx))
+                            .map(idx => sourcesList.findIndex(src => src.uri === result.candidates[0].groundingMetadata.groundingChunks[idx].web.uri) + 1)
+                            .filter(n => n > 0)
+                    )].sort((a, b) => a - b);
                     
                     if (citations.length > 0) {
                         // Group identical segments
@@ -142,7 +143,7 @@ Provide web sources to support your classification. Make sure to include both Op
                 
                 for (const segmentText of sortedSegments) {
                     const citations = segmentCiteMap.get(segmentText);
-                    const citationStr = `[${citations.join(',')}]`;
+                    const citationStr = citations.map(c => `[${c}]`).join('');
                     
                     // Replace each occurrence with text + citation
                     let startIndex = 0;
