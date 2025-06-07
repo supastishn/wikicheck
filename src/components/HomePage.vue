@@ -268,3 +268,64 @@ button:disabled {
   text-overflow: ellipsis;
 }
 </style>
+.model-selection {
+  margin: 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.model-options {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.model-options button {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.model-options button.active {
+  background: linear-gradient(145deg, var(--primary), var(--secondary));
+  color: white;
+  border-color: transparent;
+}
+
+.model-options button:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Tooltip styling */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 140px;
+  background-color: rgba(0,0,0,0.8);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -70px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  font-size: 0.85em;
+  pointer-events: none;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
