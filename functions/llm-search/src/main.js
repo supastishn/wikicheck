@@ -75,6 +75,9 @@ Provide web sources to support your classification. Make sure to include both Op
     const categoryMatch = responseText.match(/Category:\s*(.+)/i);
     const explanationMatch = responseText.match(/Explanation:\s*([\s\S]*?)(?:\n|$)/i);
 
+    // Add this HERE (before grounding sources block)
+    let explanation = explanationMatch ? explanationMatch[1] : "";
+
     // Extract sources from Gemini's groundingMetadata.groundingChunks
     let sources = [];
     let citedIndices = new Set();
@@ -108,10 +111,10 @@ Provide web sources to support your classification. Make sure to include both Op
         });
 
         // Add citation markers to explanation text
-        if (explanationMatch && explanationMatch[1]) {
+        if (explanation) {
             let currentPos = 0;
             let citedExplanation = "";
-            let explanationText = explanationMatch[1];
+            let explanationText = explanation; // Use the variable we defined
 
             // Process each citation point
             if (result.candidates[0].groundingMetadata.groundingSupports) {
@@ -146,7 +149,6 @@ Provide web sources to support your classification. Make sure to include both Op
 
     let status = "Unknown";
     let color = "gray";
-    let explanation = explanationMatch ? explanationMatch[1].trim() : "";
 
     if (categoryMatch) {
       const categoryText = categoryMatch[1].toLowerCase();
