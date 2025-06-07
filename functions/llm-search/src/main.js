@@ -33,12 +33,21 @@ export default async ({ req, res }) => {
       return res.json({ error: "Invalid JSON body" }, 400);
     }
 
-    const { statement } = requestBody;
+    // Model selection support
+    const { statement, model = 'medium' } = requestBody;
     if (!statement || typeof statement !== 'string') {
       return res.json({ error: "Missing or invalid 'statement' in request body" }, 400);
     }
 
     const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+
+    // Map model selection to Gemini model names
+    const modelMap = {
+      pro: "gemini-2.5-flash-preview-05-20",
+      medium: "gemini-2.0-flash",
+      lite: "gemini-2.0-flash-lite"
+    };
+    const modelName = modelMap[model] || modelMap.medium;
 
     // Updated prompt for neutral fact verification
     const prompt = `Classify this new statement into one category based on credible evidence and provide a brief explanation:
@@ -59,7 +68,7 @@ Explanation: [brief reason]
 Provide web sources to support your classification. Make sure to include both Open Web sources and authoritative sources like reports.`;
 
     const result = await ai.models.generateContent({
-      model: "gemini-2.5-flash-preview-05-20",
+      model: modelName,
       contents: [{parts: [{text: prompt}]}],
       config: {
         tools: [{googleSearch: {}}],

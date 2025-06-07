@@ -6,6 +6,7 @@ const statement = ref('')
 const result = ref<any>(null)
 const errorResult = ref<string | null>(null)
 const isLoading = ref(false)
+const selectedModel = ref('medium') // Default to medium
 
 const checkStatement = async () => {
   if (!statement.value.trim()) return
@@ -17,7 +18,10 @@ const checkStatement = async () => {
   try {
     const res = await functions.createExecution(
       'llm-search',
-      JSON.stringify({ statement: statement.value }),
+      JSON.stringify({
+        statement: statement.value,
+        model: selectedModel.value
+      }),
       false,
       '/',
       // @ts-ignore
@@ -83,6 +87,33 @@ const checkStatement = async () => {
 <template>
   <div class="fact-checker glass">
     <h1>Fact<span class="highlight">Checker</span></h1>
+
+    <div class="model-selection">
+      <label>Verification Model:</label>
+      <div class="model-options">
+        <div class="tooltip">
+          <button 
+            :class="{ active: selectedModel === 'lite' }"
+            @click="selectedModel = 'lite'"
+          >Lite</button>
+          <span class="tooltiptext">Fastest but less accurate</span>
+        </div>
+        <div class="tooltip">
+          <button 
+            :class="{ active: selectedModel === 'medium' }"
+            @click="selectedModel = 'medium'"
+          >Medium</button>
+          <span class="tooltiptext">Balanced speed & accuracy</span>
+        </div>
+        <div class="tooltip">
+          <button 
+            :class="{ active: selectedModel === 'pro' }"
+            @click="selectedModel = 'pro'"
+          >Pro</button>
+          <span class="tooltiptext">Most accurate, slower</span>
+        </div>
+      </div>
+    </div>
 
     <div class="input-container">
       <textarea 
