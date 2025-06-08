@@ -88,28 +88,28 @@ const checkStatement = async () => {
   <div class="fact-checker glass">
     <h1>Fact<span class="highlight">Checker</span></h1>
 
-    <div class="model-selection">
-      <label>Verification Model:</label>
-      <select v-model="selectedModel" class="model-dropdown">
-        <option value="lite">Lite: Fastest but less accurate</option>
-        <option value="medium">Medium: Balanced speed & accuracy</option>
-        <option value="pro">Pro: Most accurate, slower</option>
-      </select>
-    </div>
-
     <div class="input-container">
       <textarea 
         v-model="statement"
         placeholder="Enter statement to verify..."
         rows="4"
       ></textarea>
-
-      <button 
-        @click="checkStatement"
-        :disabled="isLoading || !statement.trim()"
-      >
-        {{ isLoading ? 'Checking...' : 'Verify' }}
-      </button>
+      <div class="controls-row">
+        <div class="model-option">
+          <span class="model-label">Model:</span>
+          <select v-model="selectedModel" class="model-dropdown">
+            <option value="lite">Lite: Fastest but less accurate</option>
+            <option value="medium">Medium: Balanced speed & accuracy</option>
+            <option value="pro">Pro: Most accurate, slower</option>
+          </select>
+        </div>
+        <button 
+          @click="checkStatement"
+          :disabled="isLoading || !statement.trim()"
+        >
+          {{ isLoading ? 'Checking...' : 'Verify' }}
+        </button>
+      </div>
     </div>
 
     <div v-if="result" class="result">
@@ -250,25 +250,41 @@ button:disabled {
   text-overflow: ellipsis;
 }
 </style>
-.model-selection {
-  margin: 1rem 0;
+/* Add these styles */
+.controls-row {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.model-option {
+  flex: 1;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--rounded-full);
+  padding: 0.15rem 0.15rem 0.15rem 1rem;
+  transition: all 0.3s;
+}
+
+.model-option:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.model-label {
+  color: var(--text-light);
+  font-size: 0.95rem;
+  white-space: nowrap;
 }
 
 .model-dropdown {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  border: none;
   color: var(--text-dark);
-  padding: 0.8rem 1rem;
-  border-radius: var(--rounded-full);
+  padding: 0.8rem 0.5rem;
+  width: 100%;
   cursor: pointer;
-  transition: all 0.3s;
-  font-size: 1rem;
+  appearance: none;
   flex: 1;
-}
-
-.model-dropdown:hover {
-  background: rgba(255, 255, 255, 0.2);
 }
