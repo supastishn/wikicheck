@@ -103,6 +103,7 @@ const checkStatement = async () => {
             <option value="pro">Pro: Most accurate, slower</option>
           </select>
         </div>
+        <div class="spacer"></div>
         <button 
           @click="checkStatement"
           :disabled="isLoading || !statement.trim()"
@@ -266,10 +267,19 @@ button:disabled {
   border-radius: var(--rounded-full);
   padding: 0.15rem 0.15rem 0.15rem 1rem;
   transition: all 0.3s;
+  margin-right: 0.5rem;
 }
 
 .model-option:hover {
   background: rgba(255, 255, 255, 0.2);
+}
+
+.spacer {
+  flex: 1;
+}
+
+button {
+  margin-left: 1rem;
 }
 
 .model-label {
