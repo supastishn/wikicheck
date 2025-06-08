@@ -90,29 +90,11 @@ const checkStatement = async () => {
 
     <div class="model-selection">
       <label>Verification Model:</label>
-      <div class="model-options">
-        <div class="tooltip">
-          <button 
-            :class="{ active: selectedModel === 'lite' }"
-            @click="selectedModel = 'lite'"
-          >Lite</button>
-          <span class="tooltiptext">Fastest but less accurate</span>
-        </div>
-        <div class="tooltip">
-          <button 
-            :class="{ active: selectedModel === 'medium' }"
-            @click="selectedModel = 'medium'"
-          >Medium</button>
-          <span class="tooltiptext">Balanced speed & accuracy</span>
-        </div>
-        <div class="tooltip">
-          <button 
-            :class="{ active: selectedModel === 'pro' }"
-            @click="selectedModel = 'pro'"
-          >Pro</button>
-          <span class="tooltiptext">Most accurate, slower</span>
-        </div>
-      </div>
+      <select v-model="selectedModel" class="model-dropdown">
+        <option value="lite">Lite: Fastest but less accurate</option>
+        <option value="medium">Medium: Balanced speed & accuracy</option>
+        <option value="pro">Pro: Most accurate, slower</option>
+      </select>
     </div>
 
     <div class="input-container">
@@ -275,57 +257,18 @@ button:disabled {
   gap: 0.5rem;
 }
 
-.model-options {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.model-options button {
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
+.model-dropdown {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  color: var(--text-light);
+  color: var(--text-dark);
+  padding: 0.8rem 1rem;
+  border-radius: var(--rounded-full);
   cursor: pointer;
   transition: all 0.3s;
+  font-size: 1rem;
+  flex: 1;
 }
 
-.model-options button.active {
-  background: linear-gradient(145deg, var(--primary), var(--secondary));
-  color: white;
-  border-color: transparent;
-}
-
-.model-options button:hover:not(.active) {
+.model-dropdown:hover {
   background: rgba(255, 255, 255, 0.2);
-}
-
-/* Tooltip styling */
-.tooltip {
-  position: relative;
-  display: inline-block;
-}
-
-.tooltip .tooltiptext {
-  visibility: hidden;
-  width: 140px;
-  background-color: rgba(0,0,0,0.8);
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  margin-left: -70px;
-  opacity: 0;
-  transition: opacity 0.2s;
-  font-size: 0.85em;
-  pointer-events: none;
-}
-
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-  opacity: 1;
 }
