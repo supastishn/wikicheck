@@ -42,7 +42,7 @@ const handleRegister = async () => {
   try {
     await account.create('unique()', email.value, password.value, name.value);
     await account.createEmailPasswordSession(email.value, password.value);
-    router.push('/');
+    router.push('/fact-check');
   } catch (error: any) {
     errorMessage.value = error.message || 'Registration failed. Please try again.';
   }

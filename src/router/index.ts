@@ -50,14 +50,10 @@ router.beforeEach(async (to, _, next) => {
 
     // If authenticated and trying to access auth pages
     if (authPages.includes(to.path)) {
-      return next('/fact-check');
+      return next('/fact-check');  // Redirect to main page
     }
+    next();
 
-    if (requiresAuth) {
-      next();
-    } else {
-      next();
-    }
   } catch (error) {
     // If not authenticated and trying to access protected route
     if (requiresAuth) {
