@@ -147,7 +147,7 @@ const checkStatement = async () => {
           <select 
             v-model="selectedModel" 
             class="model-dropdown"
-            :disabled="!user"  // Disable when not logged in
+            :disabled="!user"
           >
             <option value="lite">Lite: Fastest but less accurate</option>
             <option value="medium">Medium: Balanced speed & accuracy</option>
