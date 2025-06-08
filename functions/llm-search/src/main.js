@@ -39,6 +39,17 @@ export default async ({ req, res }) => {
       return res.json({ error: "Missing or invalid 'statement' in request body" }, 400);
     }
 
+    // Add after processing request body
+    const userId = req.headers['x-appwrite-user-id'];
+    const modelType = model.toLowerCase(); // Ensure case insensitivity
+
+    // Enforce model restriction for non-logged-in users
+    if (!userId && modelType !== 'lite') {
+      return res.json({
+        error: "Unauthorized: Lite model required for anonymous users"
+      }, 401);
+    }
+
     const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
     // Map model selection to Gemini model names
