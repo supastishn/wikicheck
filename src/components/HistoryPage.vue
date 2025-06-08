@@ -15,6 +15,11 @@
         <div class="explanation">{{ item.explanation }}</div>
         <div class="sources" v-html="item.sources"></div>
         <div class="timestamp">{{ new Date(item.$createdAt).toLocaleString() }}</div>
+        <div class="share-link">
+          <router-link :to="`/history/${item.$id}`">
+            Share this result
+          </router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -131,5 +136,9 @@ onMounted(async () => {
 
 .sources a:hover {
   text-decoration: underline;
+}
+.share-link {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
 }
 </style>

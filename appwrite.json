@@ -77,7 +77,7 @@
             "$id": "checks",
             "$permissions": [
                 "create(\"users\")",
-                "read(\"users\")"
+                "read(\"any\")"
             ],
             "databaseId": "factchecks",
             "name": "checks",

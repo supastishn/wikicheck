@@ -5,6 +5,7 @@ import Login from '../components/Login.vue'
 import Register from '../components/Register.vue'
 import HistoryPage from '../components/HistoryPage.vue'
 import AccountPage from '../components/AccountPage.vue'
+import HistoryDocument from '../components/HistoryDocument.vue'
 
 import { account } from '../utils/appwrite'
 
@@ -21,6 +22,12 @@ const routes = [
     name: 'History', 
     component: HistoryPage,
     meta: { requiresAuth: true } 
+  },
+  { 
+    path: '/history/:id', 
+    name: 'HistoryDocument', 
+    component: HistoryDocument,
+    meta: { requiresAuth: false }  // Public access
   },
   { path: '/login', name: 'Login', component: Login },
   { path: '/register', name: 'Register', component: Register },

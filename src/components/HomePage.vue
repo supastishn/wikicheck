@@ -3,6 +3,7 @@
 import { account } from '../utils/appwrite';
 import { ref, onMounted } from 'vue';
 import { functions } from '../utils/appwrite'
+import { databases } from '../utils/appwrite'
 
 const statement = ref('')
 const result = ref<any>(null)
@@ -11,6 +12,8 @@ const isLoading = ref(false)
 const selectedModel = ref('medium') // Default to medium
 
 const user = ref<any>(null);
+const latestCheckId = ref('');
+
 onMounted(async () => {
   try {
     user.value = await account.get();
@@ -26,6 +29,7 @@ const checkStatement = async () => {
   isLoading.value = true
   result.value = null
   errorResult.value = null
+  latestCheckId.value = '';
 
   // Add model enforcement and auth check
   const effectiveModel = user.value ? selectedModel.value : 'lite';
@@ -68,6 +72,29 @@ const checkStatement = async () => {
           status: xmlDoc.querySelector('status')?.textContent || 'Unknown',
           explanation: xmlDoc.querySelector('explanation')?.textContent || '',
           sources: xmlDoc.querySelector('sources')?.textContent || ''
+        }
+
+        // Save the result and get the document ID if user is logged in
+        if (user.value) {
+          try {
+            const doc = await databases.createDocument(
+              "factchecks",
+              "checks",
+              "unique()",
+              {
+                user_id: user.value.$id,
+                statement: statement.value,
+                status: result.value.status,
+                explanation: result.value.explanation,
+                sources: result.value.sources,
+                color: result.value.color
+              }
+            );
+            latestCheckId.value = doc.$id;
+          } catch (err) {
+            // Could not save, but still show result
+            latestCheckId.value = '';
+          }
         }
       } else {
         // Handle JSON errors that didn't parse above
@@ -156,6 +183,11 @@ const checkStatement = async () => {
       <div v-if="result.sources" class="sources">
         <h3>Sources</h3>
         <div v-html="result.sources"></div>
+      </div>
+      <div class="share-link" v-if="latestCheckId">
+        <router-link :to="`/history/${latestCheckId}`">
+          Share this result
+        </router-link>
       </div>
     </div>
     <div v-else-if="errorResult" class="result error">
@@ -273,6 +305,10 @@ button:disabled {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.share-link {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
 }
 </style>
 <style scoped>
