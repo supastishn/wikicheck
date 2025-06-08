@@ -206,23 +206,25 @@ Provide web sources to support your classification. Make sure to include both Op
     // Get authenticated user ID
     const userId = req.headers['x-appwrite-user-id'];
 
-    // Save to database
-    try {
-      await databases.createDocument(
-        "factchecks",
-        "checks",
-        "unique()",
-        {
-          user_id: userId,
-          statement: statement,
-          status: status,
-          explanation: explanation,
-          sources: sources.length > 0 ? `<div class="sources-list">${sources.join('<br>')}</div>` : '',
-          color: color
-        }
-      );
-    } catch (dbError) {
-      console.error("Failed to save fact check", dbError.message);
+    // Only save for logged-in users
+    if (userId) {
+      try {
+        await databases.createDocument(
+          "factchecks",
+          "checks",
+          "unique()",
+          {
+            user_id: userId,
+            statement: statement,
+            status: status,
+            explanation: explanation,
+            sources: sources.length > 0 ? `<div class="sources-list">${sources.join('<br>')}</div>` : '',
+            color: color
+          }
+        );
+      } catch (dbError) {
+        console.error("Failed to save fact check", dbError.message);
+      }
     }
 
     // XML response with new sources array (as HTML hyperlinks)

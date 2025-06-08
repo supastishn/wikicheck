@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+// Add user state
+import { account } from '../utils/appwrite';
+import { ref, onMounted } from 'vue';
 import { functions } from '../utils/appwrite'
 
 const statement = ref('')
@@ -8,6 +10,16 @@ const errorResult = ref<string | null>(null)
 const isLoading = ref(false)
 const selectedModel = ref('medium') // Default to medium
 
+const user = ref<any>(null);
+onMounted(async () => {
+  try {
+    user.value = await account.get();
+  } catch {
+    user.value = null;
+  }
+});
+
+// Modify checkStatement function
 const checkStatement = async () => {
   if (!statement.value.trim()) return
 
@@ -15,17 +27,19 @@ const checkStatement = async () => {
   result.value = null
   errorResult.value = null
 
+  // Add model enforcement and auth check
+  const effectiveModel = user.value ? selectedModel.value : 'lite';
+
   try {
     const res = await functions.createExecution(
       'llm-search',
       JSON.stringify({
         statement: statement.value,
-        model: selectedModel.value
+        model: effectiveModel  // Use enforced model
       }),
       false,
       '/',
-      // @ts-ignore
-      'POST',
+      'POST' as any,
       {'Content-Type': 'application/json'}
     )
 
@@ -88,6 +102,11 @@ const checkStatement = async () => {
   <div class="fact-checker glass">
     <h1>Fact<span class="highlight">Checker</span></h1>
 
+    <!-- Add badge for non-logged-in users -->
+    <div class="auth-notice" v-if="!user">
+      🟡 Free users: Using Lite model only. <router-link to="/login">Log in</router-link> for full features
+    </div>
+
     <div class="input-container">
       <textarea 
         v-model="statement"
@@ -95,9 +114,14 @@ const checkStatement = async () => {
         rows="4"
       ></textarea>
       <div class="controls-row">
+        <!-- Add authentication check to model dropdown -->
         <div class="model-option">
           <span class="model-label">Model:</span>
-          <select v-model="selectedModel" class="model-dropdown">
+          <select 
+            v-model="selectedModel" 
+            class="model-dropdown"
+            :disabled="!user"  // Disable when not logged in
+          >
             <option value="lite">Lite: Fastest but less accurate</option>
             <option value="medium">Medium: Balanced speed & accuracy</option>
             <option value="pro">Pro: Most accurate, slower</option>
@@ -249,6 +273,17 @@ button:disabled {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+</style>
+<style scoped>
+/* Add auth notice styling */
+.auth-notice {
+  background: rgba(255, 240, 158, 0.3);
+  border: 1px solid rgba(255, 217, 61, 0.5);
+  border-radius: var(--rounded-sm);
+  padding: 0.8rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
 }
 </style>
 <style scoped>

@@ -14,7 +14,7 @@ const routes = [
     path: '/fact-check', 
     name: 'FactCheck', 
     component: HomePage,
-    meta: { requiresAuth: true } 
+    meta: { requiresAuth: false }  // Changed from true
   },
   { 
     path: '/history', 
