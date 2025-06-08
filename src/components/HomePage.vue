@@ -251,7 +251,7 @@ button:disabled {
   text-overflow: ellipsis;
 }
 </style>
-/* Add these styles */
+<style scoped>
 .controls-row {
   display: flex;
   gap: 1rem;
@@ -298,3 +298,4 @@ button {
   appearance: none;
   flex: 1;
 }
+</style>
